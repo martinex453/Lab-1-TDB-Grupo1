@@ -1,0 +1,85 @@
+-- 1. Crear tabla categoría
+CREATE TABLE categoria (
+    id_categoria SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+-- 2. Crear tabla cliente
+CREATE TABLE cliente (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    direccion VARCHAR(255),
+    email VARCHAR(100) UNIQUE NOT NULL,
+    telefono VARCHAR(20)
+);
+
+-- 3. Crear tabla producto
+CREATE TABLE producto (
+    id_producto SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 2) NOT NULL,
+    stock INT NOT NULL,
+    estado VARCHAR(50) CHECK (estado IN ('disponible', 'agotado')) NOT NULL,
+    id_categoria INTEGER,
+    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE SET NULL
+);
+
+-- 4. Crear tabla orden
+CREATE TABLE orden (
+    id_orden SERIAL PRIMARY KEY,
+    fecha_orden TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado VARCHAR(50) CHECK (estado IN ('pendiente', 'pagada', 'enviada')) NOT NULL,
+    id_cliente INTEGER,
+    total DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE SET NULL
+);
+
+-- 5. Finalmente, crear la tabla detalle_orden 
+CREATE TABLE detalle_orden (
+    id_detalle SERIAL PRIMARY KEY,
+    id_orden INTEGER NOT NULL,
+    id_producto INTEGER NOT NULL,
+    cantidad INT NOT NULL CHECK (cantidad > 0),
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_orden) REFERENCES orden(id_orden) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE SET NULL
+);
+
+-- INSERTAR DATOS PARA PRUEBAS
+
+-- Insertar categorías
+INSERT INTO categoria (nombre) VALUES 
+    ('Electrónica'),
+    ('Ropa'),
+    ('Hogar'),
+    ('Juguetes');
+
+-- Insertar clientes
+INSERT INTO cliente (nombre, direccion, email, telefono) VALUES 
+    ('Juan Pérez', 'Calle Falsa 123', 'juan.perez@example.com', '123456789'),
+    ('María González', 'Avenida Siempreviva 456', 'maria.gonzalez@example.com', '987654321'),
+    ('Carlos López', 'Calle Luna 789', 'carlos.lopez@example.com', '1122334455');
+
+-- Insertar productos
+INSERT INTO producto (nombre, descripcion, precio, stock, estado, id_categoria) VALUES 
+    ('Smartphone', 'Teléfono inteligente de última generación', 699.99, 50, 'disponible', 1),
+    ('Televisor 4K', 'Televisor de 50 pulgadas con resolución 4K', 899.99, 30, 'disponible', 1),
+    ('Camisa', 'Camisa de algodón 100%', 29.99, 100, 'disponible', 2),
+    ('Sofá', 'Sofá de tres plazas', 499.99, 15, 'disponible', 3),
+    ('Muñeco de acción', 'Figura de acción para niños mayores de 3 años', 14.99, 200, 'disponible', 4);
+
+-- Insertar órdenes
+INSERT INTO orden (fecha_orden, estado, id_cliente, total) VALUES 
+    (NOW(), 'pendiente', 1, 729.98), -- Orden de Juan Pérez
+    (NOW(), 'pagada', 2, 529.98),    -- Orden de María González
+    (NOW(), 'enviada', 3, 29.99);    -- Orden de Carlos López
+
+-- Insertar detalles de órdenes
+INSERT INTO detalle_orden (id_orden, id_producto, cantidad, precio_unitario) VALUES 
+    (1, 1, 1, 699.99),  -- Detalle de la orden 1 (Smartphone)
+    (1, 3, 1, 29.99),   -- Detalle de la orden 1 (Camisa)
+    (2, 4, 1, 499.99),  -- Detalle de la orden 2 (Sofá)
+    (2, 5, 2, 14.99),   -- Detalle de la orden 2 (Muñeco de acción)
+    (3, 3, 1, 29.99);   -- Detalle de la orden 3 (Camisa)
+
