@@ -46,7 +46,7 @@ public class CategoriaRepositoryImp implements CategoriaRepository {
             String updatesql = "update categoria set nombre = :nombre where id_categoria = :id_categoria";
             conn.createQuery(updatesql)
                     .addParameter("id_categoria", id)
-                    .addParameter("categoria", categoria.getNombre())
+                    .addParameter("nombre", categoria.getNombre())
                     .executeUpdate();
             return "Categoria actualizada";
         } catch (Exception e){
