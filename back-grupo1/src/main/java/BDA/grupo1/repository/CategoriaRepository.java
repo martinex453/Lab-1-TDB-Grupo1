@@ -8,6 +8,6 @@ import java.util.List;
 public interface CategoriaRepository {
     public Categoria crear(Categoria categoria);
     public List<Categoria> getAll();
-    public String update(Categoria categoria, int id);
-    public void delete(int id);
+    public String update(Categoria categoria, Integer id);
+    public void delete(Integer id);
 }

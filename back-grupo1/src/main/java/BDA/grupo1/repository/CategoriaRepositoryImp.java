@@ -19,7 +19,7 @@ public class CategoriaRepositoryImp implements CategoriaRepository {
         try(Connection conn = sql2o.open()) {
             String sql = "INSERT INTO categoria (id_categoria, nombre) VALUES (:id_categoria, :nombre)";
             conn.createQuery(sql)
-                    .addParameter("id_categoria", categoria.getId_Categoria())
+                    .addParameter("id_categoria", categoria.getId_categoria())
                     .addParameter("nombre",categoria.getNombre())
                     .executeUpdate();
             return categoria;
@@ -33,17 +33,17 @@ public class CategoriaRepositoryImp implements CategoriaRepository {
     public List<Categoria> getAll(){
         try(Connection conn = sql2o.open()) {
             String sql = "SELECT * FROM categoria";
-            conn.createQuery(sql).executeAndFetch(Categoria.class);
+            return conn.createQuery(sql).executeAndFetch(Categoria.class);
         } catch (Exception e){
             System.out.println(e.getMessage());
+            return null;
         }
-        return null;
     }
 
     @Override
-    public String update(Categoria categoria, int id) {
+    public String update(Categoria categoria, Integer id) {
         try(Connection conn = sql2o.open()) {
-            String updatesql = "update Categproa set nombre = :nombre where id_categoria = :id_categoria";
+            String updatesql = "update categoria set nombre = :nombre where id_categoria = :id_categoria";
             conn.createQuery(updatesql)
                     .addParameter("id_categoria", id)
                     .addParameter("categoria", categoria.getNombre())
@@ -56,7 +56,7 @@ public class CategoriaRepositoryImp implements CategoriaRepository {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Integer id) {
         try(Connection conn = sql2o.open()) {
             String sql = "DELETE FROM categoria WHERE id_categoria = :id_categoria";
             conn.createQuery(sql)

@@ -7,6 +7,6 @@ import java.util.List;
 public interface DetalleOrdenRepository {
     public DetalleOrden crear(DetalleOrden detalleOrden);
     public List<DetalleOrden> getAll();
-    public String update(DetalleOrden detalleOrden, int id);
-    public void delete(int id);
+    public String update(DetalleOrden detalleOrden, Integer id);
+    public void delete(Integer id);
 }

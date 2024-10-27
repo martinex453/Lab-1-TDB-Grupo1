@@ -7,6 +7,6 @@ import java.util.List;
 public interface ClienteRepository {
     public Cliente crear(Cliente cliente);
     public List<Cliente> getAll();
-    public String update(Cliente cliente, int id);
-    public void delete(int id);
+    public String update(Cliente cliente, Integer id);
+    public void delete(Integer id);
 }

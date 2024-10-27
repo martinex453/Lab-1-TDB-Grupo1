@@ -8,6 +8,6 @@ import java.util.List;
 public interface OrdenRepository {
     public Orden crear(Orden orden);
     public List<Orden> getAll();
-    public String update(Orden orden, int id);
-    public void delete(int id);
+    public String update(Orden orden, Integer id);
+    public void delete(Integer id);
 }
