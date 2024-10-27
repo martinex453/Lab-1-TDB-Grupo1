@@ -1,10 +1,10 @@
-package BDA.Entrega1;
+package BDA.grupo1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Entrega1ApplicationTests {
+class Grupo1ApplicationTests {
 
 	@Test
 	void contextLoads() {
