@@ -16,11 +16,11 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     public Orden crear(Orden orden) {
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO orden (id_orden, fecha, estado, id_cliente, total) " +
+            String sql = "INSERT INTO orden (id_orden, fecha_orden, estado, id_cliente, total) " +
                     "VALUES (:id_orden, :fecha, :estado, :id_cliente, :total)";
             con.createQuery(sql)
                     .addParameter("id_orden", orden.getId_orden())
-                    .addParameter("fecha", orden.getFecha())
+                    .addParameter("fecha", orden.getFecha_orden())
                     .addParameter("estado", orden.getEstado())
                     .addParameter("id_cliente", orden.getId_cliente())
                     .addParameter("total", orden.getTotal())
@@ -48,7 +48,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
                     "WHERE id_orden = :id_orden";
             con.createQuery(sql)
                     .addParameter("id_orden", id_orden)
-                    .addParameter("fecha", orden.getFecha())
+                    .addParameter("fecha", orden.getFecha_orden())
                     .addParameter("estado", orden.getEstado())
                     .addParameter("id_cliente", orden.getId_cliente())
                     .addParameter("total", orden.getTotal())
