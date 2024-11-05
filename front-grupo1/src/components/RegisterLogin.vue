@@ -75,7 +75,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: chocolate;
+    background-color: #1E3A8A;
     width: 100%;
     overflow: hidden;
 }
@@ -86,7 +86,7 @@ export default {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: rgb(228, 151, 96);
+    background-color: #3B82F6;
 }
 
 .form-container {
@@ -96,7 +96,7 @@ export default {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: auto;
-    background-color: rgb(104, 49, 9);
+    background-color: #3B82F6;
 }
 
 .form-group {

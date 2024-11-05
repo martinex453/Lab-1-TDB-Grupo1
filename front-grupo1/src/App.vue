@@ -1,5 +1,6 @@
 <script setup>
 import RegisterLogin from './components/RegisterLogin.vue';
+import PucharceOrder from './components/PucharceOrder.vue';
 </script>
 
 <template>
