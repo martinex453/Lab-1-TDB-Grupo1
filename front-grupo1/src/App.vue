@@ -1,6 +1,7 @@
 <script setup>
 import RegisterLogin from './components/RegisterLogin.vue';
 import PucharceOrder from './components/PucharceOrder.vue';
+import Products from './components/Products.vue';
 </script>
 
 <template>
