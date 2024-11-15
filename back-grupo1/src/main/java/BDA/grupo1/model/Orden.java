@@ -1,10 +1,12 @@
 package BDA.grupo1.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
 public class Orden {
     private Long id_orden;
     private Timestamp fecha_orden;

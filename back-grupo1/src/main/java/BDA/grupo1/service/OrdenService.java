@@ -29,5 +29,8 @@ public class OrdenService {
         ordenRepository.delete(id);
     }
 
+    public List<Orden> getOrdersPage(Integer page, Integer pageSize){
+        return ordenRepository.getOrdenPages(page,pageSize);
+    }
 
 }

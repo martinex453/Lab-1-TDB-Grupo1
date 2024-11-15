@@ -1,8 +1,10 @@
 package BDA.grupo1.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Cliente {
     private Long id_cliente;
     private String nombre;

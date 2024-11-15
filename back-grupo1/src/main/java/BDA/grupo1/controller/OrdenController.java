@@ -33,4 +33,8 @@ public class OrdenController {
         ordenService.delete(id);
     }
 
+    @GetMapping("/orden/pagina/{page}/{pageSize}")
+    public List<Orden> OrdenPages(@PathVariable Integer page, @PathVariable Integer pageSize) {
+        return ordenService.getOrdersPage(page,pageSize);
+    }
 }

@@ -28,4 +28,8 @@ public class ProductoService {
     public void delete(Integer id) {
         productoRepository.delete(id);
     }
+
+    public List<Producto> getProductoPage(Integer page, Integer pageSize){
+        return productoRepository.getProductoPage(page,pageSize);
+    }
 }

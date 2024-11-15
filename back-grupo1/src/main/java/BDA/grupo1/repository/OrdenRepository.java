@@ -10,4 +10,5 @@ public interface OrdenRepository {
     public List<Orden> getAll();
     public String update(Orden orden, Integer id);
     public void delete(Integer id);
+    public List<Orden> getOrdenPages(int page, int pageSize);
 }

@@ -32,4 +32,9 @@ public class ProductoController {
     public void deleteProducto(@PathVariable Integer id) {
         productoService.delete(id);
     }
+
+    @GetMapping("/producto/pagina/{page}/{pageSize}")
+    public List<Producto> productoPages(@PathVariable Integer page, @PathVariable Integer pageSize) {
+        return productoService.getProductoPage(page,pageSize);
+    }
 }

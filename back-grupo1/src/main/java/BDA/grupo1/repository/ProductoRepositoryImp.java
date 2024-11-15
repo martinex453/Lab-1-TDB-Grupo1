@@ -44,6 +44,20 @@ public class ProductoRepositoryImp implements ProductoRepository{
         }
     }
 
+    public List<Producto> getProductoPage(int page, int pageSize){
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT * FROM producto ORDER BY id_producto LIMIT :pageSize OFFSET :offset";
+            int offset = (page - 1) * pageSize;
+
+            try(Connection con2 = sql2o.open()) {
+                return con.createQuery(sql)
+                        .addParameter("pageSize",pageSize)
+                        .addParameter("offset",offset)
+                        .executeAndFetch(Producto.class);
+            }
+        }
+    }
+
     public String update(Producto producto, Integer id_producto) {
         try (Connection con = sql2o.open()) {
             String sql = "UPDATE producto SET nombre = :nombre, descripcion = :descripcion, precio = :precio, " +
@@ -75,6 +89,8 @@ public class ProductoRepositoryImp implements ProductoRepository{
             System.out.println(e.getMessage());
         }
     }
+
+
 
 
 }
