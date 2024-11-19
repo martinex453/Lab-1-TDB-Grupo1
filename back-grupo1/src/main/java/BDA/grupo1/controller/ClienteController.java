@@ -32,4 +32,9 @@ public class ClienteController {
     public void deleteCliente(@PathVariable Integer id) {
         clienteService.delete(id);
     }
+
+    @PostMapping("/cliente/crear_cuenta")
+    public Cliente crearCuenta(@RequestBody Cliente cliente) {
+        return clienteService.crear_cuenta(cliente);
+    }
 }

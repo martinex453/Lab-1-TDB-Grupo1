@@ -10,7 +10,8 @@ CREATE TABLE cliente (
     nombre VARCHAR(255) NOT NULL,
     direccion VARCHAR(255),
     email VARCHAR(100) UNIQUE NOT NULL,
-    telefono VARCHAR(20)
+    telefono VARCHAR(20),
+    contrasena VARCHAR(20) NOT NULL
 );
 
 -- 3. Crear tabla producto
@@ -56,10 +57,10 @@ INSERT INTO categoria (nombre) VALUES
     ('Juguetes');
 
 -- Insertar clientes
-INSERT INTO cliente (nombre, direccion, email, telefono) VALUES 
-    ('Juan Pérez', 'Calle Falsa 123', 'juan.perez@example.com', '123456789'),
-    ('María González', 'Avenida Siempreviva 456', 'maria.gonzalez@example.com', '987654321'),
-    ('Carlos López', 'Calle Luna 789', 'carlos.lopez@example.com', '1122334455');
+INSERT INTO cliente (nombre, direccion, email, teléfono, contrasena) VALUES 
+    ('Juan Pérez', 'Calle Falsa 123', 'juan.perez@example.com', '123456789', 'juanperes'),
+    ('María González', 'Avenida Siempreviva 456', 'maria.gonzalez@example.com', '987654321', 'mariagonzalez'),
+    ('Carlos López', 'Calle Luna 789', 'carlos.lopez@example.com', '1122334455', 'carloslopez');
 
 -- Insertar productos
 INSERT INTO producto (nombre, descripcion, precio, stock, estado, id_categoria) VALUES 

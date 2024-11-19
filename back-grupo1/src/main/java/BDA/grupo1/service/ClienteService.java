@@ -28,4 +28,18 @@ public class ClienteService {
     public void delete(Integer id) {
         clienteRepository.delete(id);
     }
+
+    public Cliente findByEmail(String email) {
+        return clienteRepository.findByEmail(email);
+    }
+
+    public Cliente crear_cuenta(Cliente cliente) {
+        String correo = cliente.getEmail();
+        Cliente buscar_cliente = clienteRepository.findByEmail(correo);
+        if (buscar_cliente == null) {
+            return clienteRepository.crear(cliente);
+        } else {
+            return null;
+        }
+    }
 }
