@@ -32,4 +32,14 @@ public class ClienteController {
     public void deleteCliente(@PathVariable Integer id) {
         clienteService.delete(id);
     }
+
+    @GetMapping("/cliente/findByEmail")
+    public Cliente findByEmail(@RequestParam String email) {
+        return clienteService.findByEmail(email);
+    }
+
+    @PostMapping("/cliente/crear_cuenta")
+    public Cliente crearCuenta(@RequestBody Cliente cliente) {
+        return clienteService.crear_cuenta(cliente);
+    }
 }
