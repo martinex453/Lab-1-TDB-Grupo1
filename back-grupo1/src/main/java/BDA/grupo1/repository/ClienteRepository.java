@@ -9,5 +9,4 @@ public interface ClienteRepository {
     public List<Cliente> getAll();
     public String update(Cliente cliente, Integer id);
     public void delete(Integer id);
-    public Cliente findByEmail(String email);
 }

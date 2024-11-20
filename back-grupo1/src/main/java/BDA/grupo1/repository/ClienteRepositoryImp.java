@@ -17,14 +17,14 @@ public class ClienteRepositoryImp implements ClienteRepository {
     @Override
     public Cliente crear(Cliente cliente) {
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO cliente (nombre,direccion,email,telefono,contrasena)"
-                    + "VALUES (:nombre,:direccion,:email,:telefono,:contrasena)";
+            String sql = "INSERT INTO cliente (id_cliente,nombre,direccion,email,telefono)"
+                    + "VALUES (:id_cliente,:nombre,:direccion,:email,:telefono)";
             con.createQuery(sql)
+                    .addParameter("id_cliente", cliente.getId_cliente())
                     .addParameter("nombre", cliente.getNombre())
                     .addParameter("direccion", cliente.getDireccion())
                     .addParameter("email", cliente.getEmail())
                     .addParameter("telefono", cliente.getTelefono())
-                    .addParameter("contrasena", cliente.getContrasena())
                     .executeUpdate();
             return cliente;
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class ClienteRepositoryImp implements ClienteRepository {
     @Override
     public String update(Cliente cliente, Integer id_cliente) {
         try (Connection con = sql2o.open()) {
-            String sql = "update categoria set nombre = :nombre, direccion = :direccion, email = :email, telefono = :telefono, contrasena = :contrasena"
+            String sql = "update categoria set nombre = :nombre, direccion = :direccion, email = :email, telefono = :telefono"
                     + " WHERE id_cliente = :id_cliente";
             con.createQuery(sql)
                     .addParameter("id_cliente", id_cliente)
@@ -56,7 +56,6 @@ public class ClienteRepositoryImp implements ClienteRepository {
                     .addParameter("direccion", cliente.getDireccion())
                     .addParameter("email", cliente.getEmail())
                     .addParameter("telefono", cliente.getTelefono())
-                    .addParameter("contrasena", cliente.getContrasena())
                     .executeUpdate();
             return "Se actualizo el cliente con exito";
         } catch (Exception e) {
@@ -74,19 +73,6 @@ public class ClienteRepositoryImp implements ClienteRepository {
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-    }
-
-    @Override
-    public Cliente findByEmail(String email) {
-        try (Connection con = sql2o.open()) {
-            String sql = "SELECT * FROM cliente WHERE email = :email";
-            return con.createQuery(sql)
-                    .addParameter("email", email)
-                    .executeAndFetchFirst(Cliente.class);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
         }
     }
 }
