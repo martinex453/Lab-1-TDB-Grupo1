@@ -2,7 +2,9 @@ package BDA.grupo1.service;
 
 import BDA.grupo1.model.Cliente;
 import BDA.grupo1.repository.ClienteRepository;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +43,11 @@ public class ClienteService {
             return null;
         }
     }
+    // Relacionado al Authentication
+    public Cliente getClienteByCorreo(@NonNull String email){
+        return clienteRepository
+                .getClienteByCorreo(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No existe el voluntario"));
+    }
+
 }

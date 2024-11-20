@@ -4,9 +4,11 @@ import BDA.grupo1.model.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ClienteRepositoryImp implements ClienteRepository {
@@ -74,6 +76,23 @@ public class ClienteRepositoryImp implements ClienteRepository {
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public Optional<Cliente> getClienteByCorreo(String email) {
+        String queryText = "SELECT id_cliente, nombre, email, password FROM cliente WHERE email = :email";
+
+        try(Connection connection = sql2o.open()){
+            Query query = connection.createQuery(queryText)
+                    .addParameter("email", email)
+                    .addColumnMapping("id_cliente", "id_cliente");
+            Cliente cliente = query.executeAndFetchFirst(Cliente.class);
+            return Optional.ofNullable(cliente);
+        }
+        catch (Exception e){
+            throw new RuntimeException("Ocurrio un error al obtener el voluntario");
         }
     }
 
