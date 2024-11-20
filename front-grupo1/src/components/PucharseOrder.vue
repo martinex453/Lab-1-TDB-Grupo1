@@ -1,0 +1,252 @@
+<script>
+import productService from '@/services/productService';
+import orderService from '@/services/orderService';
+import orderDetailService from '@/services/orderDetailService';
+export default {
+    data() {
+        return {
+            //name: "Caja de carton",
+            //description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+            //stock: 1,
+            //state: "Disponible",
+            //price: 100,
+            product: null,
+            amount: 1
+        }
+    },
+    computed: {
+        totalPrice() {
+            return this.product?.precio * this.amount;
+        },
+        productStock() {
+            return this.product?.stock - 1;
+        }
+    },
+    methods: {
+        async getProduct(){
+            try {
+                const id = this.$route.params.id;
+                const response = await productService.getProductById(id);
+                this.product = response.data;
+            } catch (error) {
+                alert('Error al obtener producto');
+            }
+        },
+        async makeOrder(){
+            try {
+                const id_prod = this.$route.params.id;
+                //Si el cliente tiene no generado un "Carrito"/orden de compra, se genera uno
+                //OBS: Considere que tiene 1 carrito a la vez, donde orderId, se seteara en null
+                //cuando se haya enviado la solicitud total de compra o se haya cancelado
+                if(!localStorage.getItem("orderId")){
+                    const date = new Date();
+                    // Formato 'YYYY-MM-DD HH:mm:ss.SSS'
+                    const timestamp = date.toISOString().replace('T', ' ').replace('Z', '').slice(0, 23);
+                    const order = {
+                        fecha_orden: timestamp,
+                        estado: "Pendiente",
+                        id_cliente: localStorage.getItem("idUser"),
+                        total: this.totalPrice
+                    }
+                    const response = await orderService.makeOrder(order);
+                    localStorage.setItem("orderId", response.data.id_orden);
+                }
+                //obtener la orden de compra
+                const orderId = localStorage.getItem("orderId");
+                const response1 = await orderService.getOrderById(orderId);
+                const order = response1.data;
+                //actualizar el precio total de la orden
+                const actOrder = {
+                    id: orderId,
+                    fecha_orden: order.fecha_orden,
+                    estado: order.estado,
+                    id_cliente: order.id_cliente,
+                    total: order.total + this.totalPrice
+                }
+                await orderService.updateOrder(actOrder);
+
+                //Se genera el detalle de la orden para el producto seleccionado
+                //Se podria buscar por orderId y productId para ver si ya existe un detalle de orden
+                //y asi no generar uno nuevo
+                const orderDetail = {
+                    id_orden: localStorage.getItem("orderId"),
+                    id_producto: id_prod,
+                    cantidad: this.amount,
+                    precio_unitario: this.product.precio
+                }
+                const response2 = await orderDetailService.makeOrderDetail(orderDetail);
+                
+                //Se actualiza el stock del producto
+                if(this.product.stock == 0){
+                    this.product.estado = "No disponible";
+                }
+
+                //Se actualiza el stock del producto
+                const actProduct = {
+                    id: id,
+                    nombre: this.product.nombre,
+                    descripcion: this.product.descripcion,
+                    precio: this.product.precio,
+                    stock: this.product.stock - this.amount,
+                    estado: this.product.estado
+                }
+                const response3 = await productService.updateProduct(actProduct);
+                //Se vuelve a cargar el producto para actualizar la vista
+                this.getProduct();
+            } catch (error) {
+                alert('Error al realizar orden');
+            }
+        }
+
+    }
+}
+</script>
+
+<template>
+    <div class="pucharce-order-container">
+        <div class="image">
+            <img class="product-img" src="./images/caja.png" alt="Producto" />
+        </div>
+        <div class="product-information">
+            <h1>{{ this.product?.nombre }}</h1>
+            <h2>Descripcion del producto:</h2>
+            <br>
+            <p>{{ this.product?.descripcion }}</p>
+
+        </div>
+        <div class="order-form-container">
+            <h1 class="order-title">Detalles de la orden</h1>
+            <div class="pucharse-information">
+                <h1>Precio: ${{this.product?.precio}} clp</h1>
+                <h1>Cantidad</h1>
+                <input type="number" min="1" step="1" v-model="amount" class="amount-selection">
+                <h1>Stock: {{this.product?.stock}}</h1>
+                <h1>Estado: {{this.product?.estado}}</h1>
+                <h1>Precio total: ${{totalPrice}} clp</h1>
+                <br>
+            </div>
+            <button v-if="this.product?.stock>=1" class="pucharse-button">Realizar orden</button>
+            <h1 v-else class="no-stock-text">No hay stock del producto</h1>
+        </div>
+    </div>
+</template>
+
+<style>
+.pucharce-order-container {
+    display: grid;
+    grid-template-columns: 60% 1fr; /* La primera columna (imagen) ocupa 60%, la segunda ocupa el resto */
+    grid-template-rows: auto 1fr; /* Filas: primera (imagen y product-info) ajustada a su contenido, la segunda ocupa el resto del espacio */
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #F3F4F6;
+    color: #1F2937;
+}
+
+.image {
+    grid-column: 1 / 2; /* Imagen ocupa la primera columna */
+    grid-row: 1; /* Imagen en la primera fila */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 300px;
+    border-radius: 15px;
+    background-color: #E5E7EB;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.product-img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-information {
+    grid-column: 1 / 2; /* Información del producto también en la primera columna */
+    grid-row: 2; /* Información del producto en la segunda fila */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #E5E7EB;
+    color: #374151;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-form-container {
+    grid-column: 2; /* El formulario de pedido ocupa la segunda columna */
+    grid-row: 1 / 3; /* El formulario ocupa desde la primera fila hasta la última */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #E5E7EB;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pucharse-button, .no-stock-text {
+    font-size: 1.5rem;
+    width: 100%;
+    max-width: 20rem;
+    height: 3rem;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+}
+
+.pucharse-button {
+    background-color: #60A5FA; /* Azul claro */
+}
+
+.no-stock-text {
+    background-color: #EF4444; /* Rojo suave */
+}
+
+.amount-selection {
+    width: 100%;
+    max-width: 15rem;
+    height: 2.5rem;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    background-color: white;
+    color: #374151;
+    border: 1px solid #D1D5DB;
+}
+
+.pucharse-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #E5E7EB;
+}
+
+.order-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #1F2937;
+    background-color: #F9FAFB;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+</style>

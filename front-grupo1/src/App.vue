@@ -1,13 +1,14 @@
 <script setup>
 import RegisterLogin from './components/RegisterLogin.vue';
-import PucharceOrder from './components/PucharceOrder.vue';
+import PucharseOrder from './components/PucharseOrder.vue';
 import Products from './components/Products.vue';
+import totalOrderDetail from './components/totalOrderDetail.vue';
 </script>
 
 <template>
   <main>
     <div class="wrapper">
-      <RegisterLogin />
+      <totalOrderDetail />
     </div>
   </main>
 </template>

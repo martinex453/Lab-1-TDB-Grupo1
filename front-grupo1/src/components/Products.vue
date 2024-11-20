@@ -63,56 +63,85 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+/* Contenedor principal para los productos */
 .products-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh; /* Ocupa toda la altura de la pantalla */
-    width: 100vw; /* Ocupa todo el ancho de la pantalla */
-    background-color: #1E3A8A; /* Color de fondo */
-    color: white;
-    text-align: center; /* Centra el texto */
+    padding: 20px;
+    background-color: #f0f0f0; /* Fondo suave */
+    min-height: 100vh;
 }
 
-.products-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; /* Centra los elementos dentro de la lista */
-    width: 100%; /* Asegura que la lista ocupe todo el ancho disponible */
-    max-height: 80vh; /* Limita la altura máxima de la lista */
-    overflow-y: auto; /* Habilita el desplazamiento vertical */
-}
-
-.product-item {
-    background-color: #3B82F6;
-    border-radius: 10px;
-    padding: 15px;
-    width: 200px;
+/* Título principal */
+.title {
+    font-size: 24px;
+    color: #333; /* Color oscuro */
+    margin-bottom: 20px;
     text-align: center;
 }
 
+/* Lista de productos */
+.products-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Diseño adaptable */
+    gap: 20px; /* Espacio entre productos */
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo de la lista */
+}
+
+/* Estilo para cada producto */
+.product-item {
+    background-color: #fff; /* Fondo blanco */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px); /* Efecto hover */
+}
+
+/* Estilo para los nombres de los productos */
+.product-item h2 {
+    font-size: 18px;
+    color: #333; /* Color oscuro */
+    margin-bottom: 10px;
+}
+
+/* Descripción de los productos */
+.product-item p {
+    font-size: 14px;
+    color: #666; /* Color gris */
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* Precio y stock */
+.product-item h3, .product-item h4 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Botón de compra */
 .purchase-button {
-    background-color: rgb(45, 140, 184);
-    color: white;
+    padding: 12px;
+    background-color: #3b82f6; /* Azul principal */
+    color: white; /* Texto blanco */
     border: none;
-    padding: 10px;
     border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .purchase-button:hover {
-    background-color: rgb(30, 100, 150);
-}
-
-.title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    background-color: rgb(45, 140, 184);
-    padding: 8px;
-    border-radius: 10px;
+    background-color: #2563eb; /* Azul más oscuro */
 }
 </style>
