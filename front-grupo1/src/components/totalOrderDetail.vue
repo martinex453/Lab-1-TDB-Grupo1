@@ -70,11 +70,10 @@ export default {
 </script>
 
 <style>
-/* Contenedor principal */
 .container-order-summary {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Dos columnas: una pequeña y otra más grande */
-    grid-template-rows: auto 1fr; /* La primera fila se ajusta al contenido y la segunda ocupa el resto del espacio */
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr;
     gap: 20px;
     padding: 20px;
     height: 100vh;
@@ -83,18 +82,16 @@ export default {
     overflow: hidden;
 }
 
-/* Primer div */
 .order-title {
-    grid-column: span 2; /* El primer div ocupa las dos columnas */
+    grid-column: span 2;
     text-align: center;
     background-color: #fff;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    font-size: 15px; /* Tamaño de letra más pequeño */
+    font-size: 15px;
 }
 
-/* Segundo div */
 .order-details {
     background-color: #fff;
     padding: 20px;
@@ -102,16 +99,14 @@ export default {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Tercer div */
 .order-summary {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    grid-row: span 2; /* El tercer div ocupa todo el espacio vertical */
+    grid-row: span 2;
 }
 
-/* Tabla */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -133,13 +128,11 @@ tbody tr:hover {
     background-color: #f9f9f9;
 }
 
-/* Títulos y encabezados */
 h1, h2 {
     text-align: center;
     color: #333;
 }
 
-/* Botones */
 button {
     width: 100%;
     padding: 12px;

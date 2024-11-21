@@ -134,8 +134,8 @@ export default {
 <style>
 .pucharce-order-container {
     display: grid;
-    grid-template-columns: 60% 1fr; /* La primera columna (imagen) ocupa 60%, la segunda ocupa el resto */
-    grid-template-rows: auto 1fr; /* Filas: primera (imagen y product-info) ajustada a su contenido, la segunda ocupa el resto del espacio */
+    grid-template-columns: 60% 1fr;
+    grid-template-rows: auto 1fr;
     gap: 20px;
     padding: 20px;
     width: 100%;
@@ -145,8 +145,8 @@ export default {
 }
 
 .image {
-    grid-column: 1 / 2; /* Imagen ocupa la primera columna */
-    grid-row: 1; /* Imagen en la primera fila */
+    grid-column: 1 / 2;
+    grid-row: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,8 +168,8 @@ export default {
 }
 
 .product-information {
-    grid-column: 1 / 2; /* Información del producto también en la primera columna */
-    grid-row: 2; /* Información del producto en la segunda fila */
+    grid-column: 1 / 2;
+    grid-row: 2;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -182,8 +182,8 @@ export default {
 }
 
 .order-form-container {
-    grid-column: 2; /* El formulario de pedido ocupa la segunda columna */
-    grid-row: 1 / 3; /* El formulario ocupa desde la primera fila hasta la última */
+    grid-column: 2;
+    grid-row: 1 / 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -207,11 +207,11 @@ export default {
 }
 
 .pucharse-button {
-    background-color: #60A5FA; /* Azul claro */
+    background-color: #60A5FA;
 }
 
 .no-stock-text {
-    background-color: #EF4444; /* Rojo suave */
+    background-color: #EF4444;
 }
 
 .amount-selection {

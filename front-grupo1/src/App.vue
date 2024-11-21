@@ -1,22 +1,19 @@
 <script setup>
-import RegisterLogin from './components/RegisterLogin.vue';
-import PucharseOrder from './components/PucharseOrder.vue';
-import Products from './components/Products.vue';
-import totalOrderDetail from './components/totalOrderDetail.vue';
+import NavBar from './components/NavBar.vue';
 </script>
 
 <template>
   <main>
+    <NavBar />
     <div class="wrapper">
-      <totalOrderDetail />
+      <router-view />
     </div>
   </main>
 </template>
 
 <style scoped>
 @media (min-width: 1024px) {
-
-.wrapper {
+  .wrapper {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;

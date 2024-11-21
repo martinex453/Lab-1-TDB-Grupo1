@@ -15,6 +15,10 @@ export default {
     methods: {
         async submitForm() {
             if (this.register) {
+                if (!this.nombre || !this.email || !this.direccion || !this.telefono || !this.contrasena) {
+                    alert("Por favor, llene todos los campos.");
+                    return;
+                }
                 const cliente = {
                     nombre: this.nombre, 
                     email: this.email,
@@ -34,6 +38,10 @@ export default {
                     alert("Hubo un error al registrar el usuario.");
                 }
             } else {
+                if (!this.email || !this.contrasena) {
+                    alert("Por favor, llene todos los campos.");
+                    return;
+                }
                 try {
                     const response = await clienteService.loginCliente(this.email, this.contrasena); 
                     console.log("Inicio de sesión exitoso:", response.data);
@@ -215,7 +223,7 @@ button {
     width: 100%;
     padding: 12px;
     background-color: #3b82f6;
-    color: white;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     font-size: 16px;

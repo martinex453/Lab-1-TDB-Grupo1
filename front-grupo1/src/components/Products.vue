@@ -64,39 +64,36 @@ export default {
 </script>
 
 <style>
-/* Contenedor principal para los productos */
 .products-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f0f0f0; /* Fondo suave */
+    background-color: #f0f0f0;
     min-height: 100vh;
+    width: 100%;
 }
 
-/* Título principal */
 .title {
     font-size: 24px;
-    color: #333; /* Color oscuro */
+    color: #333;
     margin-bottom: 20px;
     text-align: center;
 }
 
-/* Lista de productos */
 .products-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Diseño adaptable */
-    gap: 20px; /* Espacio entre productos */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
     width: 100%;
-    max-width: 1200px; /* Ancho máximo de la lista */
+    max-width: 1200px;
 }
 
-/* Estilo para cada producto */
 .product-item {
-    background-color: #fff; /* Fondo blanco */
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -104,36 +101,32 @@ export default {
 }
 
 .product-item:hover {
-    transform: translateY(-5px); /* Efecto hover */
+    transform: translateY(-5px);
 }
 
-/* Estilo para los nombres de los productos */
 .product-item h2 {
     font-size: 18px;
-    color: #333; /* Color oscuro */
+    color: #333;
     margin-bottom: 10px;
 }
 
-/* Descripción de los productos */
 .product-item p {
     font-size: 14px;
-    color: #666; /* Color gris */
+    color: #666;
     margin-bottom: 10px;
     line-height: 1.4;
 }
 
-/* Precio y stock */
 .product-item h3, .product-item h4 {
     font-size: 16px;
     color: #333;
     margin-bottom: 10px;
 }
 
-/* Botón de compra */
 .purchase-button {
     padding: 12px;
-    background-color: #3b82f6; /* Azul principal */
-    color: white; /* Texto blanco */
+    background-color: #3b82f6;
+    color: white;
     border: none;
     border-radius: 5px;
     font-size: 14px;
@@ -142,6 +135,6 @@ export default {
 }
 
 .purchase-button:hover {
-    background-color: #2563eb; /* Azul más oscuro */
+    background-color: #2563eb;
 }
 </style>
