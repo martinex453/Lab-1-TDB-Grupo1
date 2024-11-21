@@ -46,6 +46,7 @@ public class ClienteService {
         Cliente NuevoCliente =  new Cliente(cliente.getId_cliente(), cliente.getNombre(), cliente.getDireccion(),
                 cliente.getEmail(), cliente.getTelefono(), encodedPasssword);
 
+        System.out.println(NuevoCliente);
         if (buscar_cliente == null) {
             System.out.println("No hay cliente");
             return clienteRepository.crear(NuevoCliente);

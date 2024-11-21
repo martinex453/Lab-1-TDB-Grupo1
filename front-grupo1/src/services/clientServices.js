@@ -1,11 +1,17 @@
 import httpClient from "../http-common";
 
 const createCliente = (cliente) => {
-    return httpClient.post("/cliente/crear", cliente);
+    return httpClient.post("/cliente/crear_cuenta", cliente);
 };
 
 const loginCliente = (email, contrasena) => {
-    return httpClient.post(`/cliente/login?email=${email}&contrasena=${contrasena}`);
+    const data = {
+        email: email,
+        contrasena: contrasena
+    }
+    return httpClient.post(`/authenticate/login`,data, {
+        headers: "application/json"
+    });
 };
 
 export default {
