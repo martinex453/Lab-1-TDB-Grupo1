@@ -58,7 +58,7 @@ public class User implements UserDetails {
         return true;
     }
 
-    public static User voluntarioToUser(Cliente cliente){
+    public static User clienteToUser(Cliente cliente){
         return new User(cliente.getId_cliente(), cliente.getNombre(), cliente.getEmail(), cliente.getContrasena());
     }
 

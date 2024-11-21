@@ -82,17 +82,14 @@ public class ClienteRepositoryImp implements ClienteRepository {
 
     @Override
     public Optional<Cliente> getClienteByCorreo(String email) {
-        String queryText = "SELECT id_cliente, nombre, email, password FROM cliente WHERE email = :email";
-
-        try(Connection connection = sql2o.open()){
-            Query query = connection.createQuery(queryText)
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT * FROM cliente WHERE email = :email";
+            return Optional.ofNullable(con.createQuery(sql)
                     .addParameter("email", email)
-                    .addColumnMapping("id_cliente", "id_cliente");
-            Cliente cliente = query.executeAndFetchFirst(Cliente.class);
-            return Optional.ofNullable(cliente);
-        }
-        catch (Exception e){
-            throw new RuntimeException("Ocurrio un error al obtener el voluntario");
+                    .executeAndFetchFirst(Cliente.class));
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al obtener el cliente: " + e.getMessage());
+            return null;
         }
     }
 
@@ -109,4 +106,3 @@ public class ClienteRepositoryImp implements ClienteRepository {
         }
     }
 }
-

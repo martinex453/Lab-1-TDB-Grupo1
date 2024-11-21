@@ -6,6 +6,8 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -34,15 +36,30 @@ public class ClienteService {
     public Cliente findByEmail(String email) {
         return clienteRepository.findByEmail(email);
     }
+
     public Cliente crear_cuenta(Cliente cliente) {
         String correo = cliente.getEmail();
         Cliente buscar_cliente = clienteRepository.findByEmail(correo);
+        String encodedPasssword = generateEncodedPassword(cliente.getContrasena());
+
+        System.out.println("CREANDO CLIENTE");
+        Cliente NuevoCliente =  new Cliente(cliente.getId_cliente(), cliente.getNombre(), cliente.getDireccion(),
+                cliente.getEmail(), cliente.getTelefono(), encodedPasssword);
+
         if (buscar_cliente == null) {
-            return clienteRepository.crear(cliente);
+            System.out.println("No hay cliente");
+            return clienteRepository.crear(NuevoCliente);
         } else {
+            System.out.println("Ya lo hay");
             return null;
         }
     }
+
+    private String generateEncodedPassword(String passsword){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(passsword);
+    }
+
     // Relacionado al Authentication
     public Cliente getClienteByCorreo(@NonNull String email){
         return clienteRepository

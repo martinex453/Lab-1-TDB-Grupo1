@@ -32,6 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken;
         String userEmail;
 
+        System.out.println("Entrando en JwtAuthenticationFilter");
+        if (request.getServletPath().equals("/authenticate/login") || request.getServletPath().equals("/cliente/crear_cuenta")) {
+            System.out.println("ENTRO EN EL IF");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Login no requiere de token JWT
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;

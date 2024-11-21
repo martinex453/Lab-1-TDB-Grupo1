@@ -2,6 +2,7 @@ package BDA.grupo1.authentication.services;
 
 
 import BDA.grupo1.authentication.entities.User;
+import BDA.grupo1.model.Cliente;
 import BDA.grupo1.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUserByEmail(String email) {
-        return User.voluntarioToUser(ClienteService.getClienteByCorreo(email));
+        Cliente cliente = ClienteService.getClienteByCorreo(email);
+        if (cliente == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado con email: " + email);
+        }
+        System.out.println(cliente);
+        return User.clienteToUser(cliente);
     }
 }
 

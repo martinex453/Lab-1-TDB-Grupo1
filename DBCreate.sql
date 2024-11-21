@@ -11,7 +11,7 @@ CREATE TABLE cliente (
     direccion VARCHAR(255),
     email VARCHAR(100) UNIQUE NOT NULL,
     telefono VARCHAR(20),
-    contrasena VARCHAR(20) NOT NULL
+    contrasena VARCHAR(90) NOT NULL
 );
 
 -- 3. Crear tabla producto
