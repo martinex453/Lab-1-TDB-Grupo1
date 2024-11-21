@@ -36,7 +36,7 @@ CREATE TABLE orden (
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE SET NULL
 );
 
--- 5. Finalmente, crear la tabla detalle_orden 
+-- 5. Crear la tabla detalle_orden 
 CREATE TABLE detalle_orden (
     id_detalle SERIAL PRIMARY KEY,
     id_orden INTEGER NOT NULL,
@@ -46,3 +46,56 @@ CREATE TABLE detalle_orden (
     FOREIGN KEY (id_orden) REFERENCES orden(id_orden) ON DELETE CASCADE,
     FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE SET NULL
 );
+
+-- 6. Tabla trigger
+CREATE TABLE detalles_querys (
+    id_detalle SERIAL PRIMARY KEY,
+    usuario VARCHAR(100) NOT NULL,       -- Usuario que realizó la operación
+    operacion VARCHAR(10) NOT NULL,      -- Tipo de operación (INSERT, UPDATE, DELETE)
+    tabla_afectada VARCHAR(100) NOT NULL,-- Nombre de la tabla afectada
+    consulta TEXT NOT NULL,              -- Query ejecutada
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Fecha y hora de la operación
+);
+
+CREATE OR REPLACE FUNCTION registrar_querys()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Insertar información en la tabla de auditoría
+    INSERT INTO detalles_querys (usuario, operacion, tabla_afectada, consulta)
+    VALUES (
+        session_user,                    -- Usuario que ejecutó la consulta
+        TG_OP,                           -- Operación (INSERT, UPDATE, DELETE)
+        TG_TABLE_NAME,                   -- Tabla afectada
+        current_query()                  -- Query ejecutada
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_categoria
+AFTER INSERT OR UPDATE OR DELETE ON categoria
+FOR EACH ROW
+EXECUTE FUNCTION registrar_querys();
+
+CREATE TRIGGER trigger_cliente
+AFTER INSERT OR UPDATE OR DELETE ON cliente
+FOR EACH ROW
+EXECUTE FUNCTION registrar_querys();
+
+CREATE TRIGGER trigger_producto
+AFTER INSERT OR UPDATE OR DELETE ON producto
+FOR EACH ROW
+EXECUTE FUNCTION registrar_querys();
+
+CREATE TRIGGER trigger_orden
+AFTER INSERT OR UPDATE OR DELETE ON orden
+FOR EACH ROW
+EXECUTE FUNCTION registrar_querys();
+
+CREATE TRIGGER trigger_detalle_orden
+AFTER INSERT OR UPDATE OR DELETE ON detalle_orden
+FOR EACH ROW
+EXECUTE FUNCTION registrar_querys();
+
+
+
