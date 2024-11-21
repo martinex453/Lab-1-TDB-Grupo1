@@ -11,4 +11,5 @@ public interface ClienteRepository {
     public void delete(Integer id);
     public Cliente findByEmail(String email);
     public Optional<Cliente> getClienteByCorreo(String correo);
+    public List<Cliente> top5Clientes();
 }

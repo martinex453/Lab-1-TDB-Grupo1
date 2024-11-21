@@ -43,4 +43,7 @@ public class ClienteController {
     public Cliente crearCuenta(@RequestBody Cliente cliente) {
         return clienteService.crear_cuenta(cliente);
     }
+
+    @GetMapping("/cliente/getTop5")
+    public List<Cliente> top5Clientes() { return clienteService.top5Clientes(); }
 }

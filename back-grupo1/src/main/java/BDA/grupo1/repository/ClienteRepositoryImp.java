@@ -105,4 +105,24 @@ public class ClienteRepositoryImp implements ClienteRepository {
             return null;
         }
     }
+
+    @Override
+    public List<Cliente> top5Clientes() {
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT c.nombre AS cliente, SUM(o.total) AS totalGastado" +
+                    "FROM cliente c JOIN orden o ON c.id_cliente = o.id_cliente" +
+                    "WHERE o.id_orden IN (SELECT DISTINCT o2.id_orden FROM orden o2" +
+                    "JOIN detalle_orden d ON o2.id_orden = d.id_orden" +
+                    "JOIN producto p ON d.id_producto = p.id_producto" +
+                    "JOIN categoria cat ON p.id_categoria = cat.id_categoria" +
+                    "WHERE cat.nombre = 'Tecnología'" +
+                    "AND o.fecha_orden >= NOW() - INTERVAL '1 year'" +
+                    "GROUP BY c.id_cliente, c.nombre ORDER BY totalGastado DESC LIMIT 5";
+            return con.createQuery(sql)
+                    .executeAndFetch(Cliente.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

@@ -67,4 +67,6 @@ public class ClienteService {
                 .orElseThrow(() -> new UsernameNotFoundException("No existe el voluntario"));
     }
 
+    public List<Cliente> top5Clientes() { return clienteRepository.top5Clientes(); }
+
 }
