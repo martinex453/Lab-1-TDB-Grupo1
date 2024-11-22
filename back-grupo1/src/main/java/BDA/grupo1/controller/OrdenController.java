@@ -1,6 +1,7 @@
 package BDA.grupo1.controller;
 
 import BDA.grupo1.model.Orden;
+import BDA.grupo1.service.ClienteSesionService;
 import BDA.grupo1.service.OrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,12 @@ public class OrdenController {
     @Autowired
     private OrdenService ordenService;
 
+    @Autowired
+    private ClienteSesionService clienteSesionService;
+
     @PostMapping("/orden/crear")
-    public Orden crearOrden(@RequestBody Orden orden) {
+    public Orden crearOrden(@RequestBody Orden orden, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return ordenService.crear(orden);
     }
 
@@ -25,12 +30,14 @@ public class OrdenController {
     }
 
     @PostMapping("/orden/update/{id}")
-    public String updateOrden(@RequestBody Orden orden, @PathVariable Integer id) {
+    public String updateOrden(@RequestBody Orden orden, @PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return ordenService.update(orden,id);
     }
 
     @DeleteMapping("/orden/delete/{id}")
-    public void deleteOrden(@PathVariable Integer id) {
+    public void deleteOrden(@PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         ordenService.delete(id);
     }
 

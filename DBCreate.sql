@@ -47,10 +47,17 @@ CREATE TABLE detalle_orden (
     FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE SET NULL
 );
 
--- 6. Tabla trigger
+-- 6. Crear tabla cliente_Sesion
+CREATE TABLE cliente_sesion (
+    id SERIAL PRIMARY KEY,
+    cliente_id INTEGER NOT NULL
+);
+
+
+-- 7. Tabla trigger
 CREATE TABLE detalles_querys (
     id_detalle SERIAL PRIMARY KEY,
-    usuario VARCHAR(100) NOT NULL,       -- Usuario que realizó la operación
+    cliente_id INTEGER NOT NULL,       -- Usuario que realizó la operación
     operacion VARCHAR(10) NOT NULL,      -- Tipo de operación (INSERT, UPDATE, DELETE)
     tabla_afectada VARCHAR(100) NOT NULL,-- Nombre de la tabla afectada
     consulta TEXT NOT NULL,              -- Query ejecutada
@@ -59,26 +66,32 @@ CREATE TABLE detalles_querys (
 
 CREATE OR REPLACE FUNCTION registrar_querys()
 RETURNS TRIGGER AS $$
+DECLARE
+    v_cliente_id INTEGER;
 BEGIN
-    -- Insertar información en la tabla de auditoría
-    INSERT INTO detalles_querys (usuario, operacion, tabla_afectada, consulta)
+    -- Obtener el cliente_id desde la tabla cliente_sesion (asumimos que solo hay uno)
+    SELECT cliente_id INTO v_cliente_id
+    FROM cliente_sesion
+    LIMIT 1;  -- Si hay más de uno, ajusta según el criterio que necesites
+
+	-- Eliminar todas las filas en cliente_sesion
+    DELETE FROM cliente_sesion;
+
+    -- Insertar la consulta ejecutada en la tabla de auditoría
+    INSERT INTO detalles_querys (cliente_id, operacion, tabla_afectada, consulta)
     VALUES (
-        session_user,                    -- Usuario que ejecutó la consulta
-        TG_OP,                           -- Operación (INSERT, UPDATE, DELETE)
-        TG_TABLE_NAME,                   -- Tabla afectada
-        current_query()                  -- Query ejecutada
+        v_cliente_id,                      -- Cliente que ejecutó la consulta
+        TG_OP,                             -- Operación (INSERT, UPDATE, DELETE)
+        TG_TABLE_NAME,                     -- Tabla afectada
+        current_query()                    -- Query ejecutada
     );
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_categoria
 AFTER INSERT OR UPDATE OR DELETE ON categoria
-FOR EACH ROW
-EXECUTE FUNCTION registrar_querys();
-
-CREATE TRIGGER trigger_cliente
-AFTER INSERT OR UPDATE OR DELETE ON cliente
 FOR EACH ROW
 EXECUTE FUNCTION registrar_querys();
 
