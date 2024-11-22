@@ -26,6 +26,14 @@ const getAllproducts = (token) => {
     });
 }
 
+const updateStock = (id, stock, token) => {
+    return httpClient.put(`/producto/updateStock/${id}/${stock}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 
 
 export default {

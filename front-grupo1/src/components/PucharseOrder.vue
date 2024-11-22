@@ -37,25 +37,34 @@ export default {
         async makeOrder(){
             try {
                 const id_prod = this.$route.params.id;
+                console.log("Id producto: "+id_prod);
                 //Si el cliente tiene no generado un "Carrito"/orden de compra, se genera uno
                 //OBS: Considere que tiene 1 carrito a la vez, donde orderId, se seteara en null
                 //cuando se haya enviado la solicitud total de compra o se haya cancelado
                 if(!localStorage.getItem("orderId")){
+                    console.log("No hay orden de compra");
                     const date = new Date();
-                    // Formato 'YYYY-MM-DD HH:mm:ss.SSS'
-                    const timestamp = date.toISOString().replace('T', ' ').replace('Z', '').slice(0, 23);
+                    
+                    const timestamp = date.toISOString().slice(0, 19);
                     const order = {
                         fecha_orden: timestamp,
-                        estado: "Pendiente",
-                        id_cliente: localStorage.getItem("idUser"),
+                        estado: "pendiente",
+                        id_cliente: this.idUser,
                         total: this.totalPrice
                     }
+                    console.log("Orden fec: "+order.fecha_orden);
+                    console.log("Orden est: "+order.estado);
+                    console.log("Orden id: "+order.id_cliente);
+                    console.log("Orden t: "+order.total);
                     const response = await orderService.makeOrder(order, userId, this.token);
+                    console.log("Orden creada con exito");
                     localStorage.setItem("orderId", response.data.id_orden);
                 }
                 //obtener la orden de compra
                 const orderId = localStorage.getItem("orderId");
+                console.log("OrdenId: "+orderId);
                 const response1 = await orderService.getOrderById(orderId, this.token);
+                console.log("Orden: "+response1.data);
                 const order = response1.data;
                 //actualizar el precio total de la orden
                 const actOrder = {
@@ -65,8 +74,9 @@ export default {
                     id_cliente: order.id_cliente,
                     total: order.total + this.totalPrice
                 }
-                await orderService.updateOrder(actOrder, this.token);
-
+                console.log("Orden: "+actOrder);
+                await orderService.updateOrder(orderId, actOrder, userId,  this.token);
+                console.log("Orden actualizada con exito");
                 //Se genera el detalle de la orden para el producto seleccionado
                 //Se podria buscar por orderId y productId para ver si ya existe un detalle de orden
                 //y asi no generar uno nuevo
@@ -77,24 +87,14 @@ export default {
                     precio_unitario: this.product.precio
                 }
                 
+                console.log("Orden: "+orderDetail);
                 await orderDetailService.makeOrderDetail(orderDetail, this.token, this.idUser);
                 console.log("Orden realizada con exito");
                 
-                //Se actualiza el stock del producto
-                if(this.product.stock == 0){
-                    this.product.estado = "No disponible";
-                }
-
-                //Se actualiza el stock del producto
-                const actProduct = {
-                    id: id,
-                    nombre: this.product.nombre,
-                    descripcion: this.product.descripcion,
-                    precio: this.product.precio,
-                    stock: this.product.stock - this.amount,
-                    estado: this.product.estado
-                }
-                await productService.updateProduct(id, actProduct, userId, this.token);
+                const stock = this.product.stock - this.amount;
+                
+                console.log("Stock: "+stock);
+                await productService.updateStock(id, stock, this.token);
                 console.log("Stock actualizado con exito");
                 //Se vuelve a cargar el producto para actualizar la vista
                 this.getProduct();
@@ -139,7 +139,7 @@ export default {
                 <h1>${{totalPrice}} clp</h1>
                 <br>
             </div>
-            <button v-if="this.product?.stock>=1" class="pucharse-button" @click="makeOrder">Realizar orden</button>
+            <button v-if="this.product?.stock>=1" class="pucharse-button" @click="makeOrder">Agregar a la orden</button>
             <h1 v-else class="no-stock-text">No hay stock del producto</h1>
         </div>
     </div>
