@@ -1,15 +1,16 @@
 <script>
 import clienteService from "../services/clientServices.js"; 
+import { jwtDecode } from "jwt-decode";
 
 export default {
     data() {
         return {
             register: false, 
-            nombre: '',  // Cambiado de 'name' a 'nombre'
+            nombre: '',
             email: '',
-            direccion: '',  // Cambiado de 'address' a 'direccion'
-            telefono: '',  // Cambiado de 'phone' a 'telefono'
-            contrasena: ''  // Cambiado de 'password' a 'contrasena'
+            direccion: '',
+            telefono: '',
+            contrasena: ''
         };
     },
     methods: {
@@ -44,7 +45,10 @@ export default {
                 }
                 try {
                     const response = await clienteService.loginCliente(this.email, this.contrasena); 
-                    this.$cookies.set("jwt", response.data.token, "1h");
+                    this.$cookies.set("jwt", response.data.token, "1d");
+                    const decoded = jwtDecode(response.data.token);
+                    const id = decoded.id;
+                    localStorage.setItem("idUser", id);
                     console.log("Inicio de sesión exitoso:", response.data);
                     alert("Inicio de sesión exitoso");
                     this.$router.push("/products");

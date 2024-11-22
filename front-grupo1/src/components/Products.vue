@@ -7,7 +7,7 @@
                 <p>{{ product.descripcion }}</p>
                 <h3>Precio: ${{ product.precio }} CLP</h3>
                 <h4>Stock: {{ product.stock }}</h4>
-                <button class="purchase-button" @click="productDetails">Comprar</button>
+                <button class="purchase-button" @click="productDetails(product)">Comprar</button>
             </div>
         </div>
     </div>
@@ -27,15 +27,14 @@ export default {
             try {
                 const token = this.$cookies.get("jwt");
                 const response = await productService.getAllproducts(token);
-                console.log(response.data);
                 this.products = response.data;
             } catch (error) {
                 console.error(error);
             }
-        }
-    },
-    productDetails() {
-        this.$router.push();
+        },
+        productDetails(product) {
+            this.$router.push(`/purchase/${product.id_producto}`);
+        },
     },
     mounted() {
         this.getProducts();

@@ -12,7 +12,8 @@ export default {
             //price: 100,
             product: null,
             amount: 1,
-            token: this.$cookies.get("jwt");
+            token: this.$cookies.get("jwt"),
+            idUser: localStorage.getItem("idUser")
         }
     },
     computed: {
@@ -49,7 +50,7 @@ export default {
                         id_cliente: localStorage.getItem("idUser"),
                         total: this.totalPrice
                     }
-                    const response = await orderService.makeOrder(order, this.token);
+                    const response = await orderService.makeOrder(order, userId, this.token);
                     localStorage.setItem("orderId", response.data.id_orden);
                 }
                 //obtener la orden de compra
@@ -75,8 +76,9 @@ export default {
                     cantidad: this.amount,
                     precio_unitario: this.product.precio
                 }
-                //FALTA IMPLEMENTAR
-                const response2 = await orderDetailService.makeOrderDetail(orderDetail, this.token);
+                
+                await orderDetailService.makeOrderDetail(orderDetail, this.token, this.idUser);
+                console.log("Orden realizada con exito");
                 
                 //Se actualiza el stock del producto
                 if(this.product.stock == 0){
@@ -92,14 +94,23 @@ export default {
                     stock: this.product.stock - this.amount,
                     estado: this.product.estado
                 }
-                const response3 = await productService.updateProduct(actProduct, this.token);
+                await productService.updateProduct(id, actProduct, userId, this.token);
+                console.log("Stock actualizado con exito");
                 //Se vuelve a cargar el producto para actualizar la vista
                 this.getProduct();
             } catch (error) {
                 alert('Error al realizar orden');
             }
+        },
+        validateAmount() {
+            if (this.amount < 1) {
+                this.amount = 0; // Restablecer al mínimo permitido
+            }
         }
 
+    },
+    mounted() {
+        this.getProduct();
     }
 }
 </script>
@@ -121,13 +132,14 @@ export default {
             <div class="pucharse-information">
                 <h1>Precio: ${{this.product?.precio}} clp</h1>
                 <h1>Cantidad</h1>
-                <input type="number" min="1" step="1" v-model="amount" class="amount-selection">
+                <input type="number" min="1" step="1" v-model="amount" @input="validateAmount" class="amount-selection">
                 <h1>Stock: {{this.product?.stock}}</h1>
                 <h1>Estado: {{this.product?.estado}}</h1>
-                <h1>Precio total: ${{totalPrice}} clp</h1>
+                <h1>Precio total: </h1>
+                <h1>${{totalPrice}} clp</h1>
                 <br>
             </div>
-            <button v-if="this.product?.stock>=1" class="pucharse-button">Realizar orden</button>
+            <button v-if="this.product?.stock>=1" class="pucharse-button" @click="makeOrder">Realizar orden</button>
             <h1 v-else class="no-stock-text">No hay stock del producto</h1>
         </div>
     </div>
