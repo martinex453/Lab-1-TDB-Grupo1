@@ -58,7 +58,7 @@ public class OrdenController {
     }
 
     @GetMapping("/orden/timestamp")
-    public Integer getOrdenTimestamp(@RequestParam Timestamp timestamp) {
-        return ordenService.getOrdenIDByTimestamp(timestamp);
+    public Integer getOrdenTimestamp() {
+        return ordenService.getOrdenIDByTimestamp();
     }
 }

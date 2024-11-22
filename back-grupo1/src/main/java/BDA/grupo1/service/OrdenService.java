@@ -42,8 +42,8 @@ public class OrdenService {
         return ordenRepository.getOrdenById(id);
     }
 
-    public Integer getOrdenIDByTimestamp(Timestamp timestamp){
-        return ordenRepository.getOrdenIDByTimestamp(timestamp);
+    public Integer getOrdenIDByTimestamp(){
+        return ordenRepository.getOrdenIDByTimestamp();
     }
 
 }

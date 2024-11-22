@@ -111,11 +111,10 @@ public class OrdenRepositoryImp implements OrdenRepository{
         }
     }
 
-    public Integer getOrdenIDByTimestamp(Timestamp timestamp){
+    public Integer getOrdenIDByTimestamp(){
         try (Connection con = sql2o.open()) {
-            String sql = "SELECT id_orden FROM orden WHERE fecha_orden = :fecha_orden";
+            String sql = "SELECT MAX(id_orden) FROM orden";
             return con.createQuery(sql)
-                    .addParameter("fecha_orden",timestamp)
                     .executeScalar(Integer.class);
         } catch (Exception e) {
             e.printStackTrace();

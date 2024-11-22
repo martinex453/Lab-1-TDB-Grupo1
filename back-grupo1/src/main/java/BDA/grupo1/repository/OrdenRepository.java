@@ -14,5 +14,5 @@ public interface OrdenRepository {
     public List<Orden> getOrdenPages(int page, int pageSize);
     public List<Orden> getOrdenByUserId(int id);
     public Orden getOrdenById(int id);
-    public Integer getOrdenIDByTimestamp(Timestamp timestamp);
+    public Integer getOrdenIDByTimestamp();
 }
