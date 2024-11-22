@@ -11,7 +11,8 @@ export default {
             //state: "Disponible",
             //price: 100,
             product: null,
-            amount: 1
+            amount: 1,
+            token: this.$cookies.get("jwt");
         }
     },
     computed: {
@@ -26,7 +27,7 @@ export default {
         async getProduct(){
             try {
                 const id = this.$route.params.id;
-                const response = await productService.getProductById(id);
+                const response = await productService.getProductById(id, this.token);
                 this.product = response.data;
             } catch (error) {
                 alert('Error al obtener producto');
@@ -48,12 +49,12 @@ export default {
                         id_cliente: localStorage.getItem("idUser"),
                         total: this.totalPrice
                     }
-                    const response = await orderService.makeOrder(order);
+                    const response = await orderService.makeOrder(order, this.token);
                     localStorage.setItem("orderId", response.data.id_orden);
                 }
                 //obtener la orden de compra
                 const orderId = localStorage.getItem("orderId");
-                const response1 = await orderService.getOrderById(orderId);
+                const response1 = await orderService.getOrderById(orderId, this.token);
                 const order = response1.data;
                 //actualizar el precio total de la orden
                 const actOrder = {
@@ -63,7 +64,7 @@ export default {
                     id_cliente: order.id_cliente,
                     total: order.total + this.totalPrice
                 }
-                await orderService.updateOrder(actOrder);
+                await orderService.updateOrder(actOrder, this.token);
 
                 //Se genera el detalle de la orden para el producto seleccionado
                 //Se podria buscar por orderId y productId para ver si ya existe un detalle de orden
@@ -74,7 +75,8 @@ export default {
                     cantidad: this.amount,
                     precio_unitario: this.product.precio
                 }
-                const response2 = await orderDetailService.makeOrderDetail(orderDetail);
+                //FALTA IMPLEMENTAR
+                const response2 = await orderDetailService.makeOrderDetail(orderDetail, this.token);
                 
                 //Se actualiza el stock del producto
                 if(this.product.stock == 0){
@@ -90,7 +92,7 @@ export default {
                     stock: this.product.stock - this.amount,
                     estado: this.product.estado
                 }
-                const response3 = await productService.updateProduct(actProduct);
+                const response3 = await productService.updateProduct(actProduct, this.token);
                 //Se vuelve a cargar el producto para actualizar la vista
                 this.getProduct();
             } catch (error) {

@@ -43,11 +43,15 @@ export default {
     async getOrders() {
       try {
         const id = localStorage.getItem('userId');
-        const response = await orderService.getOrderByUserId(id);
+        const token = this.$cookies.get("jwt");
+        const response = await orderService.getOrderByUserId(id, token);
         this.orders = response.data;
       } catch (error) {
         console.error(error);
       }
+    },
+    mounted() {
+      this.getOrders();
     },
   },
 };
