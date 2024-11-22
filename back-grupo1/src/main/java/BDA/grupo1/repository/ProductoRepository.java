@@ -11,4 +11,5 @@ public interface ProductoRepository {
     public void delete(Integer id);
     public List<Producto> getProductoPage(int pagina, int tamanoPagina);
     public Producto getproductoById(Integer id);
+    public void updateProductoStock(Integer id, Integer stock);
 }

@@ -36,4 +36,6 @@ public class ProductoService {
     public Producto getproductoById(Integer id) {
         return productoRepository.getproductoById(id);
     }
+
+    public void updateProductoStock(Integer id, Integer stock) { productoRepository.updateProductoStock(id, stock); }
 }

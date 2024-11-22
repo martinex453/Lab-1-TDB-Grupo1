@@ -29,6 +29,11 @@ public class DetalleOrdenController {
         return detalleOrdenService.findAll();
     }
 
+    @GetMapping("/detalleOrden/getbyOrdenid/{id}")
+    public List<DetalleOrden> getdetalleOrdenByOrdenId(@PathVariable Integer id){
+        return detalleOrdenService.getdetalleOrdenByOrdenId(id);
+    }
+
     @PostMapping("/detalleOrden/update/{id}")
     public String updateDetalleOrden(@RequestBody DetalleOrden detalleOrden, @PathVariable Integer id, @RequestParam Integer id_cliente) {
         clienteSesionService.crear(id_cliente);
@@ -40,5 +45,6 @@ public class DetalleOrdenController {
         clienteSesionService.crear(id_cliente);
         detalleOrdenService.delete(id);
     }
+
 
 }
