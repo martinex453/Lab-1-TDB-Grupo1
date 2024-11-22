@@ -44,8 +44,10 @@ export default {
                 }
                 try {
                     const response = await clienteService.loginCliente(this.email, this.contrasena); 
+                    this.$cookies.set("jwt", response.data.token, "1h");
                     console.log("Inicio de sesión exitoso:", response.data);
                     alert("Inicio de sesión exitoso");
+                    this.$router.push("/products");
                 } catch (error) {
                     console.error("Error al iniciar sesión:", error.response?.data || error.message);
                     alert("Correo o contraseña incorrectos.");
