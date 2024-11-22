@@ -4,7 +4,8 @@ import httpClient from '../http-common';
 // makeOrder, getOrderById, updateOrder, getOrderByUserId
 
 const makeOrder = (order, clientId, token) => { 
-    return httpClient.post(`/orden/crear?id_cliente=${clientId}`, order, {
+    console.log("Enviando orden");
+    return httpClient.post(`/orden/crear?id=${clientId}`, order, {
         headers: {
             Authorization: `Bearer ${token}`, 
         },

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,19 @@ public class OrdenRepositoryImp implements OrdenRepository{
             e.printStackTrace();
             return null; // Retorna null en caso de error
         }
+    }
+
+    public Integer getOrdenIDByTimestamp(Timestamp timestamp){
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT id_orden FROM orden WHERE fecha_orden = :fecha_orden";
+            return con.createQuery(sql)
+                    .addParameter("fecha_orden",timestamp)
+                    .executeScalar(Integer.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 

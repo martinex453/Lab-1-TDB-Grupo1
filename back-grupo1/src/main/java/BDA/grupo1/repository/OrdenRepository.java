@@ -3,6 +3,7 @@ package BDA.grupo1.repository;
 import BDA.grupo1.model.Orden;
 
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface OrdenRepository {
@@ -13,4 +14,5 @@ public interface OrdenRepository {
     public List<Orden> getOrdenPages(int page, int pageSize);
     public List<Orden> getOrdenByUserId(int id);
     public Orden getOrdenById(int id);
+    public Integer getOrdenIDByTimestamp(Timestamp timestamp);
 }

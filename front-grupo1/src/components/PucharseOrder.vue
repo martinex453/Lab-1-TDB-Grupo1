@@ -56,7 +56,7 @@ export default {
                     console.log("Orden est: "+order.estado);
                     console.log("Orden id: "+order.id_cliente);
                     console.log("Orden t: "+order.total);
-                    const response = await orderService.makeOrder(order, userId, this.token);
+                    const response = await orderService.makeOrder(order, localStorage.getItem("idUser"), this.token);
                     console.log("Orden creada con exito");
                     localStorage.setItem("orderId", response.data.id_orden);
                 }

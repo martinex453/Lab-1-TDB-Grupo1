@@ -6,6 +6,7 @@ import BDA.grupo1.service.OrdenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,8 @@ public class OrdenController {
     private ClienteSesionService clienteSesionService;
 
     @PostMapping("/orden/crear")
-    public Orden crearOrden(@RequestBody Orden orden, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+    public Orden crearOrden(@RequestBody Orden orden, @RequestParam Integer id) {
+        clienteSesionService.crear(id);
         return ordenService.crear(orden);
     }
 
@@ -54,5 +55,10 @@ public class OrdenController {
     @GetMapping("/orden/pagina/{page}/{pageSize}")
     public List<Orden> OrdenPages(@PathVariable Integer page, @PathVariable Integer pageSize) {
         return ordenService.getOrdersPage(page,pageSize);
+    }
+
+    @GetMapping("/orden/timestamp")
+    public Integer getOrdenTimestamp(@RequestParam Timestamp timestamp) {
+        return ordenService.getOrdenIDByTimestamp(timestamp);
     }
 }

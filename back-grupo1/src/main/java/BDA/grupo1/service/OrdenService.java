@@ -5,6 +5,7 @@ import BDA.grupo1.repository.OrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -39,6 +40,10 @@ public class OrdenService {
 
     public Orden getOrdenById(Integer id){
         return ordenRepository.getOrdenById(id);
+    }
+
+    public Integer getOrdenIDByTimestamp(Timestamp timestamp){
+        return ordenRepository.getOrdenIDByTimestamp(timestamp);
     }
 
 }
