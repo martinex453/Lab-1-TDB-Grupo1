@@ -102,7 +102,17 @@ public class ProductoRepositoryImp implements ProductoRepository{
         }
     }
 
-
+    public void updateProductoStock(Integer id_producto, Integer stock){
+        try (Connection con = sql2o.open()) {
+            String sql = "UPDATE producto SET stock = :stock WHERE id_producto = :id_producto";
+            con.createQuery(sql)
+                    .addParameter("id_producto",id_producto)
+                    .addParameter("stock",stock)
+                    .executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 

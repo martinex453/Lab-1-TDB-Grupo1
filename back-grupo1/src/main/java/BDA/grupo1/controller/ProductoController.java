@@ -50,4 +50,10 @@ public class ProductoController {
     public List<Producto> productoPages(@PathVariable Integer page, @PathVariable Integer pageSize) {
         return productoService.getProductoPage(page,pageSize);
     }
+
+    @GetMapping("/producto/updateStock/{id}/{stock}")
+    public void updateProductoStock(@PathVariable Integer id, @PathVariable Integer stock, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
+        productoService.updateProductoStock(id,stock);
+    }
 }
