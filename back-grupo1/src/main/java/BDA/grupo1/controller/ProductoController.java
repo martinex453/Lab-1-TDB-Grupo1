@@ -1,6 +1,7 @@
 package BDA.grupo1.controller;
 
 import BDA.grupo1.model.Producto;
+import BDA.grupo1.service.ClienteSesionService;
 import BDA.grupo1.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,12 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private ClienteSesionService clienteSesionService;
+
     @PostMapping("/producto/crear")
-    public Producto crearProducto(@RequestBody Producto producto) {
+    public Producto crearProducto(@RequestBody Producto producto, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return productoService.crear(producto);
     }
 
@@ -25,12 +30,19 @@ public class ProductoController {
     }
 
     @PostMapping("/producto/update/{id}")
-    public String updateProducto(@RequestBody Producto producto, @PathVariable Integer id) {
+    public String updateProducto(@RequestBody Producto producto, @PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return productoService.update(producto,id);
     }
 
+    @GetMapping("/producto/get/{id}")
+    public Producto getproductoById(@PathVariable Integer id){
+        return productoService.getproductoById(id);
+    }
+
     @DeleteMapping("/producto/delete/{id}")
-    public void deleteProducto(@PathVariable Integer id) {
+    public void deleteProducto(@PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         productoService.delete(id);
     }
 

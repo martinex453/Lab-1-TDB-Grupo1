@@ -10,4 +10,5 @@ public interface ProductoRepository {
     public String update(Producto producto, Integer id);
     public void delete(Integer id);
     public List<Producto> getProductoPage(int pagina, int tamanoPagina);
+    public Producto getproductoById(Integer id);
 }

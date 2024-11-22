@@ -2,6 +2,7 @@ package BDA.grupo1.controller;
 
 import BDA.grupo1.model.Cliente;
 import BDA.grupo1.service.ClienteService;
+import BDA.grupo1.service.ClienteSesionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,12 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private ClienteSesionService clienteSesionService;
+
     @PostMapping("/cliente/crear")
-    public Cliente crearCliente(@RequestBody Cliente cliente) {
+    public Cliente crearCliente(@RequestBody Cliente cliente, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return clienteService.crear(cliente);
     }
 
@@ -25,12 +30,14 @@ public class ClienteController {
     }
 
     @PostMapping("/cliente/update/{id}")
-    public String updateCliente(@RequestBody Cliente cliente, @PathVariable Integer id) {
+    public String updateCliente(@RequestBody Cliente cliente, @PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return clienteService.update(cliente,id);
     }
 
     @DeleteMapping("/cliente/delete/{id}")
-    public void deleteCliente(@PathVariable Integer id) {
+    public void deleteCliente(@PathVariable Integer id, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         clienteService.delete(id);
     }
 
@@ -40,7 +47,8 @@ public class ClienteController {
     }
 
     @PostMapping("/cliente/crear_cuenta")
-    public Cliente crearCuenta(@RequestBody Cliente cliente) {
+    public Cliente crearCuenta(@RequestBody Cliente cliente, @RequestParam Integer id_cliente) {
+        clienteSesionService.crear(id_cliente);
         return clienteService.crear_cuenta(cliente);
     }
 

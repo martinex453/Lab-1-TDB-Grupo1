@@ -41,6 +41,16 @@ public class OrdenController {
         ordenService.delete(id);
     }
 
+    @GetMapping("/orden/get/{id}")
+    public List<Orden>  getOrdenByUserId(@PathVariable Integer id){
+        return ordenService.getOrdenByUserId(id);
+    }
+
+    @GetMapping("/orden/getOrderid/{id}")
+    public Orden getOrdenById(@PathVariable Integer id){
+        return ordenService.getOrdenById(id);
+    }
+
     @GetMapping("/orden/pagina/{page}/{pageSize}")
     public List<Orden> OrdenPages(@PathVariable Integer page, @PathVariable Integer pageSize) {
         return ordenService.getOrdersPage(page,pageSize);

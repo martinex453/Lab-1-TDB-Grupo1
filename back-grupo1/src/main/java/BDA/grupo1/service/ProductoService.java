@@ -32,4 +32,8 @@ public class ProductoService {
     public List<Producto> getProductoPage(Integer page, Integer pageSize){
         return productoRepository.getProductoPage(page,pageSize);
     }
+
+    public Producto getproductoById(Integer id) {
+        return productoRepository.getproductoById(id);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -19,7 +20,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
             String sql = "INSERT INTO orden (fecha_orden, estado, id_cliente, total) " +
                     "VALUES (:fecha, :estado, :id_cliente, :total)";
             con.createQuery(sql)
-                    .addParameter("fecha", orden.getFecha_orden())
+                    .addParameter("fecha_orden", orden.getFecha_orden())
                     .addParameter("estado", orden.getEstado())
                     .addParameter("id_cliente", orden.getId_cliente())
                     .addParameter("total", orden.getTotal())
@@ -43,11 +44,11 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     public String update(Orden orden, Integer id_orden) {
         try (Connection con = sql2o.open()) {
-            String sql = "UPDATE orden SET fecha = :fecha, estado = :estado, id_cliente = :id_cliente, total = :total " +
+            String sql = "UPDATE orden SET fecha_orden = :fecha_orden, estado = :estado, id_cliente = :id_cliente, total = :total " +
                     "WHERE id_orden = :id_orden";
             con.createQuery(sql)
                     .addParameter("id_orden", id_orden)
-                    .addParameter("fecha", orden.getFecha_orden())
+                    .addParameter("fecha_orden", orden.getFecha_orden())
                     .addParameter("estado", orden.getEstado())
                     .addParameter("id_cliente", orden.getId_cliente())
                     .addParameter("total", orden.getTotal())
@@ -83,4 +84,31 @@ public class OrdenRepositoryImp implements OrdenRepository{
             }
         }
     }
+    public List<Orden> getOrdenByUserId(int id) {
+        String sql = "SELECT * FROM orden WHERE id_cliente = :id_cliente";
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql)
+                    .addParameter("id_cliente", id)
+                    .executeAndFetch(Orden.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public Orden getOrdenById(int id) {
+        String sql = "SELECT * FROM orden WHERE id_orden = :id_orden";
+
+        try (Connection con = sql2o.open()) {
+            List<Orden> result = con.createQuery(sql)
+                    .addParameter("id_orden", id)
+                    .executeAndFetch(Orden.class);
+            return result.isEmpty() ? null : result.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Retorna null en caso de error
+        }
+    }
+
+
 }

@@ -64,7 +64,7 @@ public class ClienteService {
     public Cliente getClienteByCorreo(@NonNull String email){
         return clienteRepository
                 .getClienteByCorreo(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No existe el voluntario"));
+                .orElseThrow(() -> new UsernameNotFoundException("No existe el cliente"));
     }
 
     public List<Cliente> top5Clientes() { return clienteRepository.top5Clientes(); }

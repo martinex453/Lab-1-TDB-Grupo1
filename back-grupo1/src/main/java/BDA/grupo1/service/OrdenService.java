@@ -33,4 +33,12 @@ public class OrdenService {
         return ordenRepository.getOrdenPages(page,pageSize);
     }
 
+    public List<Orden> getOrdenByUserId(Integer id){
+        return ordenRepository.getOrdenByUserId(id);
+    }
+
+    public Orden getOrdenById(Integer id){
+        return ordenRepository.getOrdenById(id);
+    }
+
 }

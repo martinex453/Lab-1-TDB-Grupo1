@@ -90,6 +90,19 @@ public class ProductoRepositoryImp implements ProductoRepository{
         }
     }
 
+    public Producto getproductoById(Integer id_producto) {
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT * FROM producto WHERE id_producto = :id_producto";
+            return con.createQuery(sql)
+                    .addParameter("id_producto", id_producto)
+                    .executeAndFetchFirst(Producto.class);
+        } catch (Exception e) {
+            System.out.println("Error al obtener el producto: " + e.getMessage());
+            return null;
+        }
+    }
+
+
 
 
 
