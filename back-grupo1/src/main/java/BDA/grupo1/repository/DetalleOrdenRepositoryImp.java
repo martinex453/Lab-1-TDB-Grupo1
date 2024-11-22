@@ -1,6 +1,7 @@
 package BDA.grupo1.repository;
 
 import BDA.grupo1.model.DetalleOrden;
+import BDA.grupo1.model.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
@@ -16,10 +17,9 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
 
     public DetalleOrden crear(DetalleOrden detalleOrden) {
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO detalle_orden (id_detalle, id_orden, id_producto, cantidad, precio_unitario) " +
-                    "VALUES (:id_detalle, :id_orden, :id_producto, :cantidad, :precio_unitario)";
+            String sql = "INSERT INTO detalle_orden (id_orden, id_producto, cantidad, precio_unitario) " +
+                    "VALUES (:id_orden, :id_producto, :cantidad, :precio_unitario)";
             con.createQuery(sql)
-                    .addParameter("id_detalle", detalleOrden.getId_detalle())
                     .addParameter("id_orden", detalleOrden.getId_orden())
                     .addParameter("id_producto", detalleOrden.getId_producto())
                     .addParameter("cantidad", detalleOrden.getCantidad())
@@ -68,6 +68,18 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public List<DetalleOrden> getdetalleOrdenByOrdenId(Integer id_orden) {
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT * FROM detalle_orden WHERE id_orden = :id_orden";
+            return con.createQuery(sql)
+                    .addParameter("id_orden", id_orden)
+                    .executeAndFetch(DetalleOrden.class);
+        } catch (Exception e) {
+            System.out.println("Error al obtener los detalles de la orden: " + e.getMessage());
+            return null;
         }
     }
 }

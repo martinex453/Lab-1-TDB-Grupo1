@@ -19,7 +19,7 @@ public class DetalleOrdenService {
         return detalleOrdenRepository.crear(detalleOrden);
     }
 
-    public List<DetalleOrden> findAll(){
+    public List<DetalleOrden> findAll() {
         return detalleOrdenRepository.getAll();
     }
 
@@ -29,5 +29,9 @@ public class DetalleOrdenService {
 
     public void delete(Integer id) {
         detalleOrdenRepository.delete(id);
+    }
+
+    public List<DetalleOrden> getdetalleOrdenByOrdenId(Integer id_orden) {
+        return detalleOrdenRepository.getdetalleOrdenByOrdenId(id_orden);
     }
 }

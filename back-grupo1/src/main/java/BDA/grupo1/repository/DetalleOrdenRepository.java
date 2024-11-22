@@ -9,4 +9,5 @@ public interface DetalleOrdenRepository {
     public List<DetalleOrden> getAll();
     public String update(DetalleOrden detalleOrden, Integer id);
     public void delete(Integer id);
+    public List<DetalleOrden> getdetalleOrdenByOrdenId(Integer idOrden);
 }

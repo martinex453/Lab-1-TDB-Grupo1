@@ -19,8 +19,7 @@ public class ClienteController {
     private ClienteSesionService clienteSesionService;
 
     @PostMapping("/cliente/crear")
-    public Cliente crearCliente(@RequestBody Cliente cliente, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+    public Cliente crearCliente(@RequestBody Cliente cliente) {
         return clienteService.crear(cliente);
     }
 
@@ -30,14 +29,12 @@ public class ClienteController {
     }
 
     @PostMapping("/cliente/update/{id}")
-    public String updateCliente(@RequestBody Cliente cliente, @PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+    public String updateCliente(@RequestBody Cliente cliente, @PathVariable Integer id) {
         return clienteService.update(cliente,id);
     }
 
     @DeleteMapping("/cliente/delete/{id}")
-    public void deleteCliente(@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+    public void deleteCliente(@PathVariable Integer id) {
         clienteService.delete(id);
     }
 
@@ -47,8 +44,7 @@ public class ClienteController {
     }
 
     @PostMapping("/cliente/crear_cuenta")
-    public Cliente crearCuenta(@RequestBody Cliente cliente, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+    public Cliente crearCuenta(@RequestBody Cliente cliente) {
         return clienteService.crear_cuenta(cliente);
     }
 
