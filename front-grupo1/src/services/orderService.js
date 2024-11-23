@@ -1,8 +1,5 @@
 import httpClient from '../http-common';
 
-// Nombres usados en el código
-// makeOrder, getOrderById, updateOrder, getOrderByUserId
-
 const makeOrder = (order, clientId, token) => { 
     console.log("Enviando orden");
     return httpClient.post(`/orden/crear?id=${clientId}`, order, {
@@ -36,10 +33,19 @@ const updateOrder = (id, order, clientId, token) => {
     });
 }
 
+const orderByTimestamp = (token) => {
+    return httpClient.get("/orden/timestamp", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 
 export default {
     makeOrder,
     getOrderByUserId,
     getOrderById, 
-    updateOrder
+    updateOrder,
+    orderByTimestamp
 };

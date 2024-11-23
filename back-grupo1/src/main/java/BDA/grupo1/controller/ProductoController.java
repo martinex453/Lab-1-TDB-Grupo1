@@ -51,7 +51,7 @@ public class ProductoController {
         return productoService.getProductoPage(page,pageSize);
     }
 
-    @GetMapping("/producto/updateStock/{id}/{stock}")
+    @PutMapping("/producto/updateStock/{id}/{stock}")
     public void updateProductoStock(@PathVariable Integer id, @PathVariable Integer stock, @RequestParam Integer id_cliente) {
         clienteSesionService.crear(id_cliente);
         productoService.updateProductoStock(id,stock);

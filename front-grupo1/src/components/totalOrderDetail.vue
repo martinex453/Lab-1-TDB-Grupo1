@@ -24,6 +24,7 @@
         <div class="order-summary">
             <h1>Total a pagar:</h1>
             <h2>${{ this.totalPrice }} CLP</h2>
+            <button class="order-button">Ordenar</button>
         </div>
     </div>
 </template>

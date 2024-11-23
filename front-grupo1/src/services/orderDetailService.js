@@ -22,7 +22,7 @@ const makeOrderDetails = (order, clientId, token) => {
     });
 };
 
-const getdetalleOrdenByOrdenId = (id_orden, token) => { 
+const getOrderDetailByOrderId = (id_orden, token) => { 
     return httpClient.get(`/detalleOrden/getbyOrdenid/${id_orden}`, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -32,4 +32,8 @@ const getdetalleOrdenByOrdenId = (id_orden, token) => {
 
 
 
-export default{};
+export default{
+    makeOrderDetails,
+    getOrderDetailByOrderId,
+    makeOrderDetail
+};

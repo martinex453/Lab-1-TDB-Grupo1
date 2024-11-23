@@ -3,6 +3,7 @@ import RegisterLogin from '../components/RegisterLogin.vue';
 import Products from '../components/Products.vue';
 import PurchaseOrder from '../components/PucharseOrder.vue';
 import totalOrderDetail from '../components/totalOrderDetail.vue';
+import OrderDetail from '../components/OrderDetail.vue';
 import MyOrders from '../components/MyOrders.vue';
 
 const routes = [
@@ -28,6 +29,12 @@ const routes = [
         path: '/order',
         name: 'totalOrderDetail',
         component: totalOrderDetail,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/order/:id',
+        name: 'orderDetail',
+        component: OrderDetail,
         meta: { requiresAuth: true}
     },
     {

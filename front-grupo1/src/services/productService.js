@@ -26,8 +26,8 @@ const getAllproducts = (token) => {
     });
 }
 
-const updateStock = (id, stock, token) => {
-    return httpClient.put(`/producto/updateStock/${id}/${stock}`, {
+const updateStock = (id, stock, token, clientId) => {
+    return httpClient.put(`/producto/updateStock/${id}/${stock}?id_cliente=${clientId}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -39,5 +39,6 @@ const updateStock = (id, stock, token) => {
 export default {
     getProductById,
     updateProduct,
-    getAllproducts
+    getAllproducts,
+    updateStock
 };

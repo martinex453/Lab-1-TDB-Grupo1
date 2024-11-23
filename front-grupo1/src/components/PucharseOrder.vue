@@ -42,7 +42,6 @@ export default {
                 //OBS: Considere que tiene 1 carrito a la vez, donde orderId, se seteara en null
                 //cuando se haya enviado la solicitud total de compra o se haya cancelado
                 if(!localStorage.getItem("orderId")){
-                    console.log("No hay orden de compra");
                     const date = new Date();
                     
                     const timestamp = date.toISOString().slice(0, 19);
@@ -52,19 +51,14 @@ export default {
                         id_cliente: this.idUser,
                         total: this.totalPrice
                     }
-                    console.log("Orden fec: "+order.fecha_orden);
-                    console.log("Orden est: "+order.estado);
-                    console.log("Orden id: "+order.id_cliente);
-                    console.log("Orden t: "+order.total);
-                    const response = await orderService.makeOrder(order, localStorage.getItem("idUser"), this.token);
-                    console.log("Orden creada con exito");
-                    localStorage.setItem("orderId", response.data.id_orden);
+                    const response = await orderService.makeOrder(order, this.idUser, this.token);
+                    const timestamp2 = date.toISOString().slice(0, 19).replace('T', ' ');
+                    const orderId = await orderService.orderByTimestamp(this.token);
+                    localStorage.setItem("orderId", orderId.data);
                 }
                 //obtener la orden de compra
                 const orderId = localStorage.getItem("orderId");
-                console.log("OrdenId: "+orderId);
                 const response1 = await orderService.getOrderById(orderId, this.token);
-                console.log("Orden: "+response1.data);
                 const order = response1.data;
                 //actualizar el precio total de la orden
                 const actOrder = {
@@ -74,9 +68,7 @@ export default {
                     id_cliente: order.id_cliente,
                     total: order.total + this.totalPrice
                 }
-                console.log("Orden: "+actOrder);
-                await orderService.updateOrder(orderId, actOrder, userId,  this.token);
-                console.log("Orden actualizada con exito");
+                await orderService.updateOrder(orderId, actOrder, this.idUser,  this.token);
                 //Se genera el detalle de la orden para el producto seleccionado
                 //Se podria buscar por orderId y productId para ver si ya existe un detalle de orden
                 //y asi no generar uno nuevo
@@ -86,15 +78,14 @@ export default {
                     cantidad: this.amount,
                     precio_unitario: this.product.precio
                 }
-                
-                console.log("Orden: "+orderDetail);
+                console.log("id_prod: "+ orderDetail.id_producto);
                 await orderDetailService.makeOrderDetail(orderDetail, this.token, this.idUser);
                 console.log("Orden realizada con exito");
                 
                 const stock = this.product.stock - this.amount;
                 
                 console.log("Stock: "+stock);
-                await productService.updateStock(id, stock, this.token);
+                await productService.updateStock(id_prod, stock, this.token, this.idUser);
                 console.log("Stock actualizado con exito");
                 //Se vuelve a cargar el producto para actualizar la vista
                 this.getProduct();
