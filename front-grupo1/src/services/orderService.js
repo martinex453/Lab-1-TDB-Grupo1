@@ -41,8 +41,12 @@ const orderByTimestamp = (token) => {
     });
 }
 
+<<<<<<< Updated upstream
 const submitOrder = (carrito, idUser,  token) => {
     console.log(carrito);
+=======
+const submitOrder = (carrito, idUser, token) => {
+>>>>>>> Stashed changes
     return httpClient.post(`/crearOrdenCompra/${idUser}`, carrito, {
         headers: {
             Authorization: `Bearer ${token}`,
