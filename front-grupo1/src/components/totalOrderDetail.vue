@@ -48,7 +48,7 @@ export default {
             const carritoJson = [];
             for(let i = 0; i < this.$carrito.length; i++){
                 const productoCarrito = {
-                    id_producto: this.$carrito[i][0],
+                    id_producto: parseInt(this.$carrito[i][0]),
                     cantidad: this.$carrito[i][1],
                     precio_unitario: this.$carrito[i][2]
                 }
@@ -56,7 +56,7 @@ export default {
             }
             console.log(carritoJson);
             console.log(JSON.stringify(carritoJson));
-            //await orderService.submitOrder(carritoJson, this.idUser, this.token);
+            await orderService.submitOrder(carritoJson, this.idUser, this.token);
             alert("Orden realizada con éxito");
             this.$carrito.splice(0, this.$carrito.length);
             this.updateCarrito();
