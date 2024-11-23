@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
 public class ProcedimientosController {
 
@@ -37,7 +37,7 @@ public class ProcedimientosController {
             return "Error al aplicar el descuento: " + e.getMessage();
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/crearOrdenCompra/{id_cliente}")
     public String crearOrden(@PathVariable int id_cliente, @RequestBody List<DetalleOrden> detalles) {
        try{

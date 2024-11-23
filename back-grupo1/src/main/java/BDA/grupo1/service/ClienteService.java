@@ -43,7 +43,7 @@ public class ClienteService {
 
         System.out.println("CREANDO CLIENTE");
         Cliente NuevoCliente =  new Cliente(cliente.getId_cliente(), cliente.getNombre(), cliente.getDireccion(),
-                cliente.getEmail(), cliente.getTelefono(), encodedPasssword);
+                cliente.getEmail(), cliente.getTelefono(), encodedPasssword, cliente.getRol());
 
         System.out.println(NuevoCliente);
         if (buscar_cliente == null) {

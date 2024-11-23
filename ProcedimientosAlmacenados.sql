@@ -95,7 +95,7 @@ DECLARE
 BEGIN
     -- Se crea la orden
     INSERT INTO orden (id_cliente, total, estado)
-    VALUES (p_id_cliente, 0, 'pendiente')
+    VALUES (p_id_cliente, 0, 'pagada')
     RETURNING id_orden INTO v_id_orden;
     
     -- Iterar sobre cada detalle de producto del JSON

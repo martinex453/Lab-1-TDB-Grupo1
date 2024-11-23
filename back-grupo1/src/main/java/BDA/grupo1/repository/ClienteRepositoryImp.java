@@ -19,14 +19,15 @@ public class ClienteRepositoryImp implements ClienteRepository {
     @Override
     public Cliente crear(Cliente cliente) {
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO cliente (nombre,direccion,email,telefono,contrasena)"
-                    + "VALUES (:nombre,:direccion,:email,:telefono,:contrasena)";
+            String sql = "INSERT INTO cliente (nombre,direccion,email,telefono,contrasena,rol)"
+                    + "VALUES (:nombre,:direccion,:email,:telefono,:contrasena,:rol)";
             con.createQuery(sql)
                     .addParameter("nombre", cliente.getNombre())
                     .addParameter("direccion", cliente.getDireccion())
                     .addParameter("email", cliente.getEmail())
                     .addParameter("telefono", cliente.getTelefono())
                     .addParameter("contrasena", cliente.getContrasena())
+                    .addParameter("rol", cliente.getRol())
                     .executeUpdate();
             return cliente;
         } catch (Exception e) {
