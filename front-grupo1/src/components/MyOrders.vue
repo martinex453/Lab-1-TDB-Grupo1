@@ -1,16 +1,17 @@
 <template>
     <div class="container-order-summary">
         <div class="order-title">
-            <h1>Mis órdenes de compra</h1>
+            <h1>Órdenes de compra</h1>
         </div>
         <div class="order-details">
             <table>
                 <thead>
                     <tr>
-                        <th>Fecha creacion</th>
+                        <th>Fecha creación</th>
                         <th>Estado</th>
                         <th>Total</th>
                         <th>Detalles</th>
+                        <th v-if="isAdmin">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,9 +22,16 @@
                         <td>
                             <button @click="goToOrderDetail(order.id_orden)">Ir</button>
                         </td>
+                        <td v-if="isAdmin">
+                            <button v-if="order.estado === 'pagada'" @click="sendOrder(order.id_orden)">Enviar</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="pagination-container">
+                <button v-if="page > 1" @click="changePage(1)" class="pageButton">Ant</button>
+                <button v-if="orders.length === pageSize" @click="changePage(page + 1)" class="pageButton">Sig</button>
+            </div>
         </div>
     </div>
 </template>
@@ -32,43 +40,68 @@
 import orderService from '@/services/orderService';
 
 export default {
-  data() {
-    return {
-      orders: [],
-    };
-  },
-  methods: {
-    async getOrders() {
-      try {
-        const id = localStorage.getItem('idUser');
-        const token = this.$cookies.get("jwt");
-        const response = await orderService.getOrderByUserId(id, token);
-        this.orders = response.data;
-      } catch (error) {
-        console.error(error);
-      }
+    data() {
+        return {
+            orders: [],
+            isAdmin: false,
+            page: 1, // Número de página actual
+            pageSize: 12 // Tamaño de la página
+        };
     },
-    goToOrderDetail(orderId) {
-        console.log(orderId);
-        this.$router.push(`/order/${orderId}`);
+    methods: {
+        async getOrders() {
+            const token = this.$cookies.get("jwt");
+            const userRole = localStorage.getItem("userRole");
+
+            this.isAdmin = userRole === 'admin';
+
+            try {
+                if (this.isAdmin) {
+                    const response = await orderService.getOrders(this.page, this.pageSize, token);
+                    this.orders = response.data;
+                } else {
+                    const id = localStorage.getItem('idUser');
+                    const response = await orderService.getOrderByUserId(id, this.page, this.pageSize, token);
+                    this.orders = response.data;
+                }
+            } catch (error) {
+                console.error("Error al obtener órdenes:", error);
+            }
+        },
+        async sendOrder(orderId) {
+            try {
+                await orderService.updateOrderStatus(orderId, 'enviada');
+                this.getOrders();
+                alert('Orden enviada correctamente');
+            } catch (error) {
+                console.error("Error al enviar la orden:", error);
+                alert('Error al enviar la orden');
+            }
+        },
+        goToOrderDetail(orderId) {
+            this.$router.push(`/order/${orderId}`);
+        },
+        formatDate(date) {
+            const newDate = new Date(date);
+            return newDate.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            });
+        },
+        async changePage(newPage) {
+            this.page = newPage; // Cambia la página actual
+            await this.getOrders(); // Obtiene las órdenes de la nueva página
+        }
     },
-    formatDate(date) {
-        const newDate = new Date("2024-11-23T19:14:14.014+00:00");
-        const formattedDate = newDate.toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
-        return formattedDate;
-    },
-  },
-  mounted() {
-    this.getOrders();
-  },
+    mounted() {
+        this.getOrders();
+    }
 };
 </script>
 
 <style scoped>
+/* Estilos existentes */
 .container-order-summary {
     display: grid;
     grid-template-columns: 1fr;
@@ -126,13 +159,34 @@ h1 {
     font-size: 1.5rem;
 }
 
-router-link {
-    color: #3b82f6;
-    text-decoration: none;
+button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
-router-link:hover {
-    text-decoration: underline;
-    color: #2563eb;
+button:hover {
+    background-color: #2563eb;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre los botones */
+    margin-top: 20px; /* Espacio extra superior */
+}
+
+.pageButton {
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 70px;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 </style>

@@ -14,6 +14,15 @@ const loginCliente = (email, contrasena) => {
     });
 };
 
+const getRole = (id, token) => {
+    return httpClient.get(`/`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+
 export default {
     createCliente,
     loginCliente

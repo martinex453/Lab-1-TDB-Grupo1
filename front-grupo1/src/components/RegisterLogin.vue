@@ -26,6 +26,7 @@ export default {
                     direccion: this.direccion,  
                     telefono: this.telefono,  
                     contrasena: this.contrasena,  
+                    rol: "cliente"
                 };
 
                 try {
@@ -33,7 +34,7 @@ export default {
                     console.log("Registro exitoso:", response.data);
                     alert("Usuario registrado correctamente");
                     this.resetForm();
-                    this.register = false; 
+                    this.register = false;
                 } catch (error) {
                     console.error("Error al registrar el usuario:", error.response?.data || error.message);
                     alert("Hubo un error al registrar el usuario.");
@@ -45,10 +46,14 @@ export default {
                 }
                 try {
                     const response = await clienteService.loginCliente(this.email, this.contrasena); 
-                    this.$cookies.set("jwt", response.data.token, "1d");
-                    const decoded = jwtDecode(response.data.token);
+                    const token = response.data.token;
+                    this.$cookies.set("jwt", token, "1d");
+                    const decoded = jwtDecode(token);
                     const id = decoded.id;
+                    const responseRole = await clienteService.getRole(id, token);
+                    const role = responseRole.data;
                     localStorage.setItem("idUser", id);
+                    localStorage.setItem("userRole", role);
                     console.log("Inicio de sesión exitoso:", response.data);
                     alert("Inicio de sesión exitoso");
                     this.$router.push("/products");

@@ -16,6 +16,11 @@ export default {
   computed: {
     isRegisterLogin() {
       return this.$route.path === '/';
+    },
+    isAdmin() {
+      // Local storage no esta bien, hay que buscar otra solcuion
+      const userRole = localStorage.getItem("userRole"); // Asegúrate de que el rol se almacene en localStorage
+      return userRole === 'admin';
     }
   }
 };

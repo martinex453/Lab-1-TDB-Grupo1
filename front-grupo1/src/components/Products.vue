@@ -3,12 +3,18 @@
         <h1 class="title">Lista de Productos</h1>
         <div class="products-list">
             <div class="product-item" v-for="product in products" :key="product.id">
+                <img class="product-img" src="./images/caja.png" alt="Producto" />
                 <h2>{{ product.nombre }}</h2>
                 <p>{{ product.descripcion }}</p>
                 <h3>Precio: ${{ product.precio }} CLP</h3>
                 <h4>Stock: {{ product.stock }}</h4>
                 <button class="purchase-button" @click="productDetails(product)">Comprar</button>
+                <button class="edit-button">Editar</button>
             </div>
+        </div>
+        <div class="pagination-container">
+            <button v-if="showPrevButton" @click="changePage(page - 1)" class="pageButton">Ant</button>
+            <button v-if="showNextButton" @click="changePage(page + 1)" class="pageButton">Sig</button>
         </div>
     </div>
 </template>
@@ -19,14 +25,24 @@ import productService from '../services/productService.js';
 export default {
     data() {
         return {
-            products: []
+            products: [],
+            page: 1,
+            pageSize: 12,
         };
+    },
+    computed: {
+        showPrevButton() {
+            return this.page > 1;
+        },
+        showNextButton() {
+            return this.products.length === this.pageSize;
+        },
     },
     methods: {
         async getProducts() {
             try {
                 const token = this.$cookies.get("jwt");
-                const response = await productService.getAllproducts(token);
+                const response = await productService.getPoductsForPages(this.page, this.pageSize, token);
                 this.products = response.data;
             } catch (error) {
                 console.error(error);
@@ -35,11 +51,16 @@ export default {
         productDetails(product) {
             this.$router.push(`/purchase/${product.id_producto}`);
         },
+        async changePage(newPage) {
+            if (newPage < 1) return;
+            this.page = newPage;
+            this.getProducts();
+        },
     },
     mounted() {
         this.getProducts();
-    }
-}
+    },
+};
 </script>
 
 <style>
@@ -62,10 +83,12 @@ export default {
 
 .products-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
 }
 
 .product-item {
@@ -77,10 +100,53 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.3s;
+    height: 100%;
+    min-height: 300px;
 }
 
 .product-item:hover {
     transform: translateY(-5px);
+}
+
+.product-img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.purchase-button,
+.edit-button {
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.purchase-button:hover,
+.edit-button:hover {
+    background-color: #2563eb;
+}
+
+
+.product-img {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.product-item h2,
+.product-item p,
+.product-item h3,
+.product-item h4 {
+    margin: 0;
+    text-align: center;
 }
 
 .product-item h2 {
@@ -96,24 +162,28 @@ export default {
     line-height: 1.4;
 }
 
-.product-item h3, .product-item h4 {
+.product-item h3,
+.product-item h4 {
     font-size: 16px;
     color: #333;
     margin-bottom: 10px;
 }
 
-.purchase-button {
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pageButton {
     padding: 12px;
     background-color: #3b82f6;
     color: white;
     border: none;
     border-radius: 5px;
+    width: 70px;
     font-size: 14px;
-    cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.purchase-button:hover {
-    background-color: #2563eb;
 }
 </style>

@@ -9,8 +9,8 @@ const makeOrder = (order, clientId, token) => {
     });
 };
 
-const getOrderByUserId = (id, token) => { 
-    return httpClient.get(`/orden/get/${id}`, {
+const getOrderByUserId = (id, nroPag, tamanioPag, token) => { 
+    return httpClient.get(`/orden/pagina/user/${id}/${nroPag}/${tamanioPag}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -43,10 +43,6 @@ const orderByTimestamp = (token) => {
 
 <<<<<<< Updated upstream
 const submitOrder = (carrito, idUser,  token) => {
-    console.log(carrito);
-=======
-const submitOrder = (carrito, idUser, token) => {
->>>>>>> Stashed changes
     return httpClient.post(`/crearOrdenCompra/${idUser}`, carrito, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -54,6 +50,21 @@ const submitOrder = (carrito, idUser, token) => {
     });
 }
 
+const getOrders = (nroPag, tamanioPag, token) => {
+    return httpClient.get(`/orden/pagina/${nroPag}/${tamanioPag}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+const updateOrderStatus = (orderId, newStatus, token) => {
+    return httpClient.put(`/ordenes/${orderId}/estado`, { estado: newStatus }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 
 export default {
     makeOrder,
@@ -61,5 +72,7 @@ export default {
     getOrderById, 
     updateOrder,
     orderByTimestamp,
-    submitOrder
+    submitOrder,
+    getOrders,
+    updateOrderStatus
 };
