@@ -16,9 +16,9 @@ INSERT INTO producto (nombre, descripcion, precio, stock, estado, id_categoria) 
 ('Mesa', 'Mesa de comedor de madera', 200.00, 15, 'disponible', 3);
 
 -- Insertar clientes
-INSERT INTO cliente (nombre, direccion, email, telefono, contrasena) VALUES
-('Juan Pérez', 'Calle Falsa 123', 'juan@example.com', '123456789', 'password123'),
-('Ana López', 'Avenida Siempre Viva 456', 'ana@example.com', '987654321', 'password456');
+INSERT INTO cliente (nombre, direccion, email, telefono, contrasena, rol) VALUES
+('Juan Pérez', 'Calle Falsa 123', 'juan@example.com', '123456789', 'password123', 'admin'),
+('Ana López', 'Avenida Siempre Viva 456', 'ana@example.com', '987654321', 'password456', 'cliente');
 
 -- Insertar órdenes
 INSERT INTO orden (fecha_orden, estado, id_cliente, total) VALUES

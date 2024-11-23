@@ -36,6 +36,11 @@ public class ClienteService {
         return clienteRepository.findByEmail(email);
     }
 
+    public String get_rol_cliente(Integer id_cliente) {
+        Cliente c = clienteRepository.get_rol_usuario(id_cliente);
+        return c.getRol();
+    }
+
     public Cliente crear_cuenta(Cliente cliente) {
         String correo = cliente.getEmail();
         Cliente buscar_cliente = clienteRepository.findByEmail(correo);

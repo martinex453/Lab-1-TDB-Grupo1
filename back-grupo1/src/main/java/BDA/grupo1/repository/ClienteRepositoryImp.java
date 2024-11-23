@@ -108,6 +108,19 @@ public class ClienteRepositoryImp implements ClienteRepository {
     }
 
     @Override
+    public Cliente get_rol_usuario(Integer id_cliente) {
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT rol FROM cliente WHERE id_cliente = :id_cliente";
+            return con.createQuery(sql)
+                    .addParameter("id_cliente", id_cliente)
+                    .executeAndFetchFirst(Cliente.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public List<Cliente> top5Clientes() {
         try (Connection con = sql2o.open()) {
             String sql = "SELECT c.nombre AS cliente, SUM(o.total) AS totalGastado" +

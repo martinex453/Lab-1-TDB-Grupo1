@@ -20,7 +20,8 @@ BEGIN
     JOIN 
         cliente c ON dq.cliente_id = c.id_cliente
     WHERE 
-        dq.cliente_id IN (
+        dq.cliente_id NOT IN (1) -- Excluir el cliente con id_cliente = 1
+        AND dq.cliente_id IN (
             SELECT cliente_id
             FROM (
                 SELECT 
@@ -28,6 +29,8 @@ BEGIN
                     COUNT(*) AS total_operaciones
                 FROM 
                     detalles_querys dq
+                WHERE 
+                    dq.cliente_id NOT IN (1) -- También excluir aquí
                 GROUP BY 
                     dq.cliente_id
                 ORDER BY 
@@ -38,8 +41,6 @@ BEGIN
     ORDER BY 
         c.nombre, 
         dq.fecha DESC;
-    
-    -- Esto termina el procedimiento sin necesidad de un RETURN
 END;
 $$;
 
