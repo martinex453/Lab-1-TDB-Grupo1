@@ -10,6 +10,7 @@ public interface ClienteRepository {
     public String update(Cliente cliente, Integer id);
     public void delete(Integer id);
     public Cliente findByEmail(String email);
+    public Cliente get_rol_usuario(Integer id_cliente);
     public Optional<Cliente> getClienteByCorreo(String correo);
     public List<Cliente> top5Clientes();
 }

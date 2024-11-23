@@ -50,4 +50,9 @@ public class ClienteController {
 
     @GetMapping("/cliente/getTop5")
     public List<Cliente> top5Clientes() { return clienteService.top5Clientes(); }
+
+    @GetMapping("/cliente/getRol")
+    public String get_rol_usuario(@RequestParam Integer id) {
+        return clienteService.get_rol_cliente(id);
+    }
 }
