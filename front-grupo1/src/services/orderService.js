@@ -57,14 +57,6 @@ const getOrders = (nroPag, tamanioPag, token) => {
     });
 };
 
-const updateOrderStatus = (orderId, newStatus, token) => {
-    return httpClient.put(`/ordenes/${orderId}/estado`, { estado: newStatus }, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-};
-
 export default {
     makeOrder,
     getOrderByUserId,
@@ -72,6 +64,5 @@ export default {
     updateOrder,
     orderByTimestamp,
     submitOrder,
-    getOrders,
-    updateOrderStatus
+    getOrders
 };

@@ -5,6 +5,7 @@ import PurchaseOrder from '../components/PucharseOrder.vue';
 import totalOrderDetail from '../components/totalOrderDetail.vue';
 import OrderDetail from '../components/OrderDetail.vue';
 import MyOrders from '../components/MyOrders.vue';
+import EditProduct from '../components/EditProduct.vue';
 
 const routes = [
     {
@@ -35,6 +36,12 @@ const routes = [
         path: '/order/:id',
         name: 'orderDetail',
         component: OrderDetail,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/edit-product/:id',
+        name: 'editProduct',
+        component: EditProduct,
         meta: { requiresAuth: true}
     },
     {

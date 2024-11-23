@@ -15,7 +15,7 @@ const loginCliente = (email, contrasena) => {
 };
 
 const getRole = (id, token) => {
-    return httpClient.get(`/`, {
+    return httpClient.get(`/cliente/getRol?id=${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -25,6 +25,7 @@ const getRole = (id, token) => {
 
 export default {
     createCliente,
-    loginCliente
+    loginCliente,
+    getRole
 };
 
