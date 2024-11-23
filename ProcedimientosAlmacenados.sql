@@ -1,50 +1,49 @@
 CREATE OR REPLACE PROCEDURE reporte_top_usuarios_querys()
 LANGUAGE plpgsql
 AS $$
-DECLARE
-    v_cliente_id INTEGER;
-    v_nombre_cliente VARCHAR(255);
-    v_total_operaciones INTEGER;
-    v_query TEXT;
-    v_fecha TIMESTAMP;
 BEGIN
-    -- Obtener los usuarios que realizaron más queries
-    FOR v_cliente_id, v_nombre_cliente, v_total_operaciones IN
-        SELECT 
-            dq.cliente_id, 
-            c.nombre, 
-            COUNT(*) AS total_operaciones
-        FROM 
-            detalles_querys dq
-        JOIN 
-            cliente c ON dq.cliente_id = c.id_cliente
-        GROUP BY 
-            dq.cliente_id, c.nombre
-        ORDER BY 
-            total_operaciones DESC
-        LIMIT 3  -- Mostrar el top 3 de usuarios más activos
-    LOOP
-        -- Mostrar el resumen del usuario
-        RAISE NOTICE 'Cliente: %, Total Queries: %', 
-                     v_nombre_cliente, v_total_operaciones;
+    -- Crear la tabla temporal
+    CREATE TEMP TABLE IF NOT EXISTS tmp_reporte_top_usuarios (
+        nombre_cliente VARCHAR(255),
+        consulta_realizada TEXT,
+        fecha_consulta TIMESTAMP
+    );
 
-        -- Mostrar las consultas realizadas por este usuario
-        FOR v_query, v_fecha IN
-            SELECT 
-                dq.consulta, 
-                dq.fecha
-            FROM 
-                detalles_querys dq
-            WHERE 
-                dq.cliente_id = v_cliente_id
-            ORDER BY 
-                dq.fecha DESC
-        LOOP
-            RAISE NOTICE '    Consulta: %, Fecha: %', v_query, v_fecha;
-        END LOOP;
-    END LOOP;
+    -- Insertar los datos en la tabla temporal
+    INSERT INTO tmp_reporte_top_usuarios (nombre_cliente, consulta_realizada, fecha_consulta)
+    SELECT 
+        c.nombre AS nombre_cliente,
+        dq.consulta AS consulta_realizada,
+        dq.fecha AS fecha_consulta
+    FROM 
+        detalles_querys dq
+    JOIN 
+        cliente c ON dq.cliente_id = c.id_cliente
+    WHERE 
+        dq.cliente_id IN (
+            SELECT cliente_id
+            FROM (
+                SELECT 
+                    dq.cliente_id, 
+                    COUNT(*) AS total_operaciones
+                FROM 
+                    detalles_querys dq
+                GROUP BY 
+                    dq.cliente_id
+                ORDER BY 
+                    total_operaciones DESC
+                LIMIT 3
+            ) top_clientes
+        )
+    ORDER BY 
+        c.nombre, 
+        dq.fecha DESC;
+    
+    -- Esto termina el procedimiento sin necesidad de un RETURN
 END;
 $$;
+
+
 
 CREATE OR REPLACE PROCEDURE aplicar_descuento_a_categoria(
     p_id_categoria INT,
