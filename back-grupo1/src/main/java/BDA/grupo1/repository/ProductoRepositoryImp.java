@@ -16,10 +16,9 @@ public class ProductoRepositoryImp implements ProductoRepository{
 
     public Producto crear(Producto producto) {
         try (Connection con = sql2o.open()) {
-            String sql = "INSERT INTO producto (id_producto, nombre, descripcion, precio, stock, estado, id_categoria) " +
-                    "VALUES (:id_producto, :nombre, :descripcion, :precio, :stock, :estado, :id_categoria)";
+            String sql = "INSERT INTO producto ( nombre, descripcion, precio, stock, estado, id_categoria) " +
+                    "VALUES (:nombre, :descripcion, :precio, :stock, :estado, :id_categoria)";
             con.createQuery(sql)
-                    .addParameter("id_producto", producto.getId_producto())
                     .addParameter("nombre", producto.getNombre())
                     .addParameter("descripcion", producto.getDescripcion())
                     .addParameter("precio", producto.getPrecio())

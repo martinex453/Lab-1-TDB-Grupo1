@@ -17,9 +17,8 @@ public class CategoriaRepositoryImp implements CategoriaRepository {
     @Override
     public Categoria crear(Categoria categoria) {
         try(Connection conn = sql2o.open()) {
-            String sql = "INSERT INTO categoria (id_categoria, nombre) VALUES (:id_categoria, :nombre)";
+            String sql = "INSERT INTO categoria (nombre) VALUES (:nombre)";
             conn.createQuery(sql)
-                    .addParameter("id_categoria", categoria.getId_categoria())
                     .addParameter("nombre",categoria.getNombre())
                     .executeUpdate();
             return categoria;
