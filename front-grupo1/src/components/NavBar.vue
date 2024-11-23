@@ -1,15 +1,25 @@
 <template>
-    <nav class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-links">
-          <router-link to="/" class="navbar-link">Salir</router-link>
-          <router-link to="/products" class="navbar-link">Productos</router-link>
-          <router-link to="/myOrders" class="navbar-link">Mis Ordenes</router-link>
-          <router-link to="/order" class="navbar-link">Orden</router-link>
-        </div>
+  <nav v-if="!isRegisterLogin" class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-links">
+        <router-link to="/" class="navbar-link">Salir</router-link>
+        <router-link to="/products" class="navbar-link">Productos</router-link>
+        <router-link to="/myOrders" class="navbar-link">Mis Ordenes</router-link>
+        <router-link to="/order" class="navbar-link">Carrito</router-link>
       </div>
-    </nav>
-  </template>
+    </div>
+  </nav>
+</template>
+
+<script>
+export default {
+  computed: {
+    isRegisterLogin() {
+      return this.$route.path === '/';
+    }
+  }
+};
+</script>
   
   
 <style scoped>
