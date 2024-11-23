@@ -13,10 +13,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="detail in totalOrderDetail" :key="detail.id_detalle">
-                        <td>{{ detail.name }}</td>
-                        <td>{{ detail.cantidad }}</td>
-                        <td>{{ detail.precio_unitario }}</td>
+                    <tr v-for="(item, index) in totalOrderDetail" :key="index">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>${{ item.precio_unitario }} CLP</td>
                     </tr>
                 </tbody>
             </table>
@@ -24,7 +24,7 @@
         <div class="order-summary">
             <h1>Total a pagar:</h1>
             <h2>${{ this.totalPrice }} CLP</h2>
-            <button class="order-button">Ordenar</button>
+            <button class="order-button" @click="submitOrder">Ordenar</button>
         </div>
     </div>
 </template>
@@ -37,35 +37,62 @@ import orderDetailService from '@/services/orderDetailService';
 export default {
     data() {
         return {
-            orderId: localStorage.getItem("orderId"),
-            totalOrderDetail: {},
-            totalPrice: 0
+            token: this.$cookies.get("jwt"),
+            totalOrderDetail: [],
+            totalPrice: 0,
+            idUser: localStorage.getItem("idUser")
         };
     },
     methods: {
-        async getTotalOrderDetail() {
-            if (!this.orderIdExists) {
-                alert("No se ha encontrado una orden de compra.");
-                return;
-            }
-            try {
-                const response = await orderDetailService.getOrderDetailByOrderId(this.orderId);
-                this.totalOrderDetail = response.data;
-
-                for (const detail of this.totalOrderDetail) {
-                    const productResponse = await productService.getProductById(detail.id_detalle);
-                    this.$set(detail, 'name', productResponse.data.nombre);
+        async submitOrder(){
+            const carritoJson = [];
+            for(let i = 0; i < this.$carrito.length; i++){
+                const productoCarrito = {
+                    id_producto: this.$carrito[i][0],
+                    cantidad: this.$carrito[i][1],
+                    precio_unitario: this.$carrito[i][2]
                 }
-
-                const total = await orderService.getOrderById(this.orderId);
-                this.totalPrice = total.data.total;
-            } catch (error) {
-                alert('Error al obtener detalle de orden');
+                carritoJson.push(productoCarrito);
             }
-        }
+            console.log(carritoJson);
+            console.log(JSON.stringify(carritoJson));
+            //await orderService.submitOrder(carritoJson, this.idUser, this.token);
+            alert("Orden realizada con éxito");
+            this.$carrito.splice(0, this.$carrito.length);
+            this.updateCarrito();
+            console.log(this.$carrito);
+            this.loadCart();
+            await this.fetchProductNames();
+            this.calculateTotalPrice();
+        },
+        loadCart() {
+            const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+            this.totalOrderDetail = carrito.map(item => {
+                return {
+                    id: item[0], // ID del producto
+                    cantidad: item[1], // Cantidad
+                    precio_unitario: item[2], // Precio unitario
+                    name: '' // Nombre del producto, se llenará después
+                };
+            });
+        },
+        async fetchProductNames() {
+            for (const detail of this.totalOrderDetail) {
+                const productResponse = await productService.getProductById(detail.id, this.token);
+                console.log(productResponse.data.nombre);
+                detail.name = productResponse.data.nombre;
+            }
+        },
+        calculateTotalPrice() {
+            this.totalPrice = this.totalOrderDetail.reduce((total, item) => {
+                return total + (item.precio_unitario * item.cantidad);
+            }, 0);
+        },
     },
-    created() {
-        this.getTotalOrderDetail();
+    async created() {
+        this.loadCart();
+        await this.fetchProductNames();
+        this.calculateTotalPrice();
     }
 };
 </script>

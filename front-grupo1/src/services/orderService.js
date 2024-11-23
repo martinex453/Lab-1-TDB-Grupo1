@@ -41,11 +41,20 @@ const orderByTimestamp = (token) => {
     });
 }
 
+const sumbitOrder = (carrito, idUser,  token) => {
+    return httpClient.post(`path?id_user=${idUser}`, carrito, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 
 export default {
     makeOrder,
     getOrderByUserId,
     getOrderById, 
     updateOrder,
-    orderByTimestamp
+    orderByTimestamp,
+    sumbitOrder
 };
