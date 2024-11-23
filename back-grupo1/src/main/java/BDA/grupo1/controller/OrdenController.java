@@ -57,6 +57,11 @@ public class OrdenController {
         return ordenService.getOrdersPage(page,pageSize);
     }
 
+    @GetMapping("/orden/pagina/user/{user}/{page}/{pageSize}")
+    public List<Orden> OrdenPagesUser(@PathVariable Integer user, @PathVariable Integer page, @PathVariable Integer pageSize) {
+        return ordenService.getOrdersPageUser(user,page,pageSize);
+    }
+
     @GetMapping("/orden/timestamp")
     public Integer getOrdenTimestamp() {
         return ordenService.getOrdenIDByTimestamp();

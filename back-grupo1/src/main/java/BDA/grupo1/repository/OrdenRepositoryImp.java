@@ -123,5 +123,21 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     }
 
+    public List<Orden> getOrdersPageUser(Integer User, int page, int pageSize){
+        try (Connection con = sql2o.open()) {
+            String sql = "SELECT * FROM orden WHERE id_cliente = :id_cliente ORDER BY id_orden LIMIT :pageSize OFFSET :offset ";
+            Integer offset = (page - 1) * pageSize;
+
+            try (Connection con2 = sql2o.open()) {
+                return con.createQuery(sql)
+                        .addParameter("pageSize",pageSize)
+                        .addParameter("offset",offset)
+                        .addParameter("id_cliente", User)
+                        .executeAndFetch(Orden.class);
+            }
+
+        }
+    }
+
 
 }
