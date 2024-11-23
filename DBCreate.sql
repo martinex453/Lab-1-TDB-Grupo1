@@ -67,14 +67,24 @@ CREATE TABLE detalles_querys (
 CREATE OR REPLACE FUNCTION registrar_querys()
 RETURNS TRIGGER AS $$
 DECLARE
-    v_cliente_id INTEGER;
+    v_cliente_id INTEGER := 1; -- Valor por defecto
 BEGIN
-    -- Obtener el cliente_id desde la tabla cliente_sesion (asumimos que solo hay uno)
-    SELECT cliente_id INTO v_cliente_id
-    FROM cliente_sesion
-    LIMIT 1;  -- Si hay más de uno, ajusta según el criterio que necesites
+    -- Obtener el cliente_id desde la tabla cliente_sesion
+    BEGIN
+        SELECT cliente_id INTO v_cliente_id
+        FROM cliente_sesion
+        LIMIT 1;
+    EXCEPTION
+        WHEN undefined_object THEN
+            -- Si ocurre un error, el valor por defecto se mantiene
+            v_cliente_id := 1;
+    END;
 
-	-- Eliminar todas las filas en cliente_sesion
+	IF v_cliente_id IS NULL THEN
+		v_cliente_id :=1;
+	END IF;
+
+    -- Eliminar todas las filas en cliente_sesion
     DELETE FROM cliente_sesion;
 
     -- Insertar la consulta ejecutada en la tabla de auditoría
@@ -86,6 +96,7 @@ BEGIN
         current_query()                    -- Query ejecutada
     );
 
+    -- Retornar la fila afectada
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
