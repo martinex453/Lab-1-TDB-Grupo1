@@ -1,13 +1,13 @@
 package BDA.grupo1.controller;
 
+import BDA.grupo1.model.DetalleOrden;
 import BDA.grupo1.service.ProcedimientosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProcedimientosController {
@@ -35,6 +35,16 @@ public class ProcedimientosController {
         } catch (Exception e) {
             return "Error al aplicar el descuento: " + e.getMessage();
         }
+    }
+
+    @PostMapping("/crearOrdenCompra/{id_cliente}")
+    public String crearOrden(@PathVariable int id_cliente, @RequestBody List<DetalleOrden> detalles) {
+       try{
+           procedimientoService.crearOrdenCompra(id_cliente, detalles);
+           return "Orden de compra realizada con exito.";
+       } catch (Exception e) {
+           return "Error al crear la orden de compra: " + e.getMessage();
+       }
     }
 }
 

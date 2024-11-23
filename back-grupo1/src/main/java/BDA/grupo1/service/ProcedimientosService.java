@@ -1,18 +1,16 @@
 package BDA.grupo1.service;
 
+import BDA.grupo1.model.DetalleOrden;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.SqlOutParameter;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.math.BigDecimal;
-import java.sql.Types;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -80,5 +78,27 @@ public class ProcedimientosService {
                     .executeUpdate();
         }
     }
+
+    public String crearOrdenCompra(int idCliente, List<DetalleOrden> detalles) throws JSONException {
+        JSONArray detallesJson = new JSONArray();
+        for (DetalleOrden detalle : detalles) {
+            JSONObject detalleJson = new JSONObject();
+            detalleJson.put("id_producto", detalle.getId_producto());
+            detalleJson.put("cantidad", detalle.getCantidad());
+            detalleJson.put("precio_unitario", detalle.getPrecio_unitario());
+            detallesJson.put(detalleJson);
+        }
+        String detallesJsonString = detallesJson.toString();
+        String sql = "CALL registrar_orden(:p_id_cliente, :lista_detalleOrden::json)";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("p_id_cliente", idCliente)
+                    .addParameter("lista_detalleOrden", detallesJsonString) // Enviar JSON como string
+                    .executeUpdate();
+        }
+        return "Orden creada con éxito";
+    }
+
+
 
 }
