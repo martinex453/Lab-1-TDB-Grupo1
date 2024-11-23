@@ -23,7 +23,7 @@
                             <button @click="goToOrderDetail(order.id_orden)">Ir</button>
                         </td>
                         <td v-if="isAdmin">
-                            <button v-if="order.estado === 'pagada'" @click="sendOrder(order.id_orden)">Enviar</button>
+                            <button v-if="order.estado === 'pagada'" @click="sendOrder(order)">Enviar</button>
                         </td>
                     </tr>
                 </tbody>
@@ -45,7 +45,9 @@ export default {
             orders: [],
             isAdmin: false,
             page: 1, // Número de página actual
-            pageSize: 12 // Tamaño de la página
+            pageSize: 12, // Tamaño de la página
+            id_user: localStorage.getItem('idUser'),
+            token: this.$cookies.get("jwt"),
         };
     },
     methods: {
@@ -68,9 +70,10 @@ export default {
                 console.error("Error al obtener órdenes:", error);
             }
         },
-        async sendOrder(orderId) {
+        async sendOrder(order) {
             try {
-                await orderService.updateOrderStatus(orderId, 'enviada');
+                order.estado = 'enviada';
+                await orderService.updateOrder(order.id, order, this.id_user, this.token);
                 this.getOrders();
                 alert('Orden enviada correctamente');
             } catch (error) {

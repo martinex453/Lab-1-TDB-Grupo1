@@ -9,7 +9,7 @@ const getProductById = (id, token) => {
 };
 
 const updateProduct = (id, product, clientId, token) => {
-    return httpClient.put(`/producto/update/${id}?id_cliente=${clientId}`, product, {
+    return httpClient.post(`/producto/update/${id}?id_cliente=${clientId}`, product, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

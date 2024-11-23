@@ -48,6 +48,7 @@ export default {
             const carritoJson = [];
             for(let i = 0; i < this.$carrito.length; i++){
                 const productoCarrito = {
+                    id_producto: parseInt(this.$carrito[i][0]),
                     id_producto: Number(this.$carrito[i][0]),
                     cantidad: this.$carrito[i][1],
                     precio_unitario: this.$carrito[i][2]

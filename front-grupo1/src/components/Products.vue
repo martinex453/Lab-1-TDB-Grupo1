@@ -9,7 +9,7 @@
                 <h3>Precio: ${{ product.precio }} CLP</h3>
                 <h4>Stock: {{ product.stock }}</h4>
                 <button class="purchase-button" @click="productDetails(product)">Comprar</button>
-                <button class="edit-button">Editar</button>
+                <button v-if="this.isAdmin" class="edit-button" @click="editProduct(product.id_producto)">Editar</button>
             </div>
         </div>
         <div class="pagination-container">
@@ -28,6 +28,7 @@ export default {
             products: [],
             page: 1,
             pageSize: 12,
+            isAdmin: localStorage.getItem("userRole") === "admin",
         };
     },
     computed: {
@@ -55,6 +56,9 @@ export default {
             if (newPage < 1) return;
             this.page = newPage;
             this.getProducts();
+        },
+        editProduct(productId) {
+            this.$router.push(`/edit-product/${productId}`);
         },
     },
     mounted() {
