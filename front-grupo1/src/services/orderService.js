@@ -41,7 +41,7 @@ const orderByTimestamp = (token) => {
     });
 }
 
-const submitOrder = (carrito, idUser,  token) => {
+const submitOrder = (carrito, idUser, token) => {
     return httpClient.post(`/crearOrdenCompra/${idUser}`, carrito, {
         headers: {
             Authorization: `Bearer ${token}`,

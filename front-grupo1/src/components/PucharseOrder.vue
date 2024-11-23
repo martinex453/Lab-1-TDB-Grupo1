@@ -36,6 +36,10 @@ export default {
         },
         async makeOrder(){
             try {
+                if(this.amount > this.product.stock){
+                    alert('No hay suficiente stock');
+                    return;
+                }
                 for(let i = 0; i < this.$carrito.length; i++){
                     if(this.$carrito[i][0] == this.$route.params.id){
                         this.$carrito[i][1] += this.amount;

@@ -49,6 +49,7 @@ export default {
             for(let i = 0; i < this.$carrito.length; i++){
                 const productoCarrito = {
                     id_producto: parseInt(this.$carrito[i][0]),
+                    id_producto: Number(this.$carrito[i][0]),
                     cantidad: this.$carrito[i][1],
                     precio_unitario: this.$carrito[i][2]
                 }
@@ -56,6 +57,8 @@ export default {
             }
             console.log(carritoJson);
             console.log(JSON.stringify(carritoJson));
+            console.log(this.token);
+            console.log(this.idUser);
             await orderService.submitOrder(carritoJson, this.idUser, this.token);
             alert("Orden realizada con éxito");
             this.$carrito.splice(0, this.$carrito.length);
@@ -125,6 +128,7 @@ export default {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #000000;
 }
 
 .order-summary {

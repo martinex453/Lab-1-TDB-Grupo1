@@ -64,7 +64,7 @@ export default {
                 this.stock = String(this.product.stock);
                 this.price = String(this.product.precio);
             } catch (error) {
-                alert('Error al obtener producto');
+                alert('Error al buscar producto');
             }
         },
         validateAmount() {

@@ -129,7 +129,7 @@ public class ClienteRepositoryImp implements ClienteRepository {
                     "JOIN detalle_orden d ON o2.id_orden = d.id_orden" +
                     "JOIN producto p ON d.id_producto = p.id_producto" +
                     "JOIN categoria cat ON p.id_categoria = cat.id_categoria" +
-                    "WHERE cat.nombre = 'Tecnología'" +
+                    "WHERE cat.nombre = 'Tecnologia'" +
                     "AND o.fecha_orden >= NOW() - INTERVAL '1 year'" +
                     "GROUP BY c.id_cliente, c.nombre ORDER BY totalGastado DESC LIMIT 5";
             return con.createQuery(sql)
