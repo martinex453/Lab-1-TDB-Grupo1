@@ -11,9 +11,6 @@ const makeOrderDetail = (orderDetail, token, idCliente) => {
     });
 };
 
-//Nombres usados en el codigo
-//makeOrderDetail, getOrderDetailByOrderId
-
 const makeOrderDetails = (order, clientId, token) => { 
     return httpClient.post(`/detalleOrden/crear?id_cliente=${clientId}`, order, {
         headers: {

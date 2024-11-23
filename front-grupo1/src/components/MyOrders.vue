@@ -15,13 +15,11 @@
                 </thead>
                 <tbody>
                     <tr v-for="order in orders" :key="order.id_orden">
-                        <td>{{ order.fecha_orden }}</td>
+                        <td>{{ formatDate(order.fecha_orden) }}</td>
                         <td>{{ order.estado }}</td>
                         <td>{{ order.total }}</td>
                         <td>
-                            <router-link :to="{ name: 'totalOrderDetail', params: { id: order.id_orden } }">
-                                Ir
-                            </router-link>
+                            <button @click="goToOrderDetail(order.id_orden)">Ir</button>
                         </td>
                     </tr>
                 </tbody>
@@ -42,7 +40,7 @@ export default {
   methods: {
     async getOrders() {
       try {
-        const id = localStorage.getItem('userId');
+        const id = localStorage.getItem('idUser');
         const token = this.$cookies.get("jwt");
         const response = await orderService.getOrderByUserId(id, token);
         this.orders = response.data;
@@ -50,9 +48,22 @@ export default {
         console.error(error);
       }
     },
-    mounted() {
-      this.getOrders();
+    goToOrderDetail(orderId) {
+        console.log(orderId);
+        this.$router.push(`/order/${orderId}`);
     },
+    formatDate(date) {
+        const newDate = new Date("2024-11-23T19:14:14.014+00:00");
+        const formattedDate = newDate.toLocaleDateString("es-ES", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+        return formattedDate;
+    },
+  },
+  mounted() {
+    this.getOrders();
   },
 };
 </script>
@@ -85,6 +96,7 @@ export default {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: auto;
+    color: #000000;
 }
 
 table {

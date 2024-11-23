@@ -25,7 +25,7 @@
             </table>
         </div>
         <div class="order-summary">
-            <h1>Total a pagar:</h1>
+            <h1>Precio total:</h1>
             <h2>${{ this.totalPrice }} CLP</h2>
         </div>
     </div>
@@ -39,7 +39,7 @@ import orderDetailService from '@/services/orderDetailService';
 export default {
     data() {
         return {
-            totalOrderDetail: {},
+            totalOrderDetail: [],
             totalPrice: 0,
             token: this.$cookies.get("jwt"),
             orderStatus: ''
@@ -48,17 +48,22 @@ export default {
     methods: {
         async getTotalOrderDetail() {
             const orderId = this.$route.params.id;
+            
             if (!orderId) {
                 alert("No se ha encontrado una orden de compra.");
                 return;
             }
             try {
+                console.log(orderId);
                 const response = await orderDetailService.getOrderDetailByOrderId(orderId, this.token);
                 this.totalOrderDetail = response.data;
-
+                console.log(response);
+                console.log(this.totalOrderDetail);
                 for (const detail of this.totalOrderDetail) {
-                    const productResponse = await productService.getProductById(detail.id_detalle, this.token);
-                    this.$set(detail, 'name', productResponse.data.nombre);
+                    const productResponse = await productService.getProductById(detail.id_producto, this.token);
+                    console.log(productResponse.data.nombre);
+                    detail.name = productResponse.data.nombre;
+                    console.log(detail);
                 }
 
                 const total = await orderService.getOrderById(orderId, this.token);
@@ -103,6 +108,7 @@ export default {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #000000;
 }
 
 .order-summary {
