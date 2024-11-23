@@ -11,13 +11,13 @@ import org.sql2o.Sql2o;
 
 @Configuration
 public class DatabaseContext {
-    @Value("${database.url}")
+    @Value("${spring.datasource.url}")
     private String dbUrl;
 
-    @Value("${database.user}")
+    @Value("${spring.datasource.username}")
     private String dbUser;
 
-    @Value("${database.password}")
+    @Value("${spring.datasource.password}")
     private String dbPass;
 
     @Bean

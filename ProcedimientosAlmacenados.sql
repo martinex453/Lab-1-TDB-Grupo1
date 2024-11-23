@@ -43,11 +43,9 @@ BEGIN
 END;
 $$;
 
-
-
 CREATE OR REPLACE PROCEDURE aplicar_descuento_a_categoria(
     p_id_categoria INT,
-    p_descuento DECIMAL
+    p_descuento NUMERIC(10,4)
 )
 LANGUAGE plpgsql
 AS $$
