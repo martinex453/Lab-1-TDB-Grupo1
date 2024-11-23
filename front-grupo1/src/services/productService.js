@@ -34,11 +34,20 @@ const updateStock = (id, stock, token, clientId) => {
     });
 }
 
+const getPoductsForPages = (page, pageSize, token) => {
+    return httpClient.get(`/producto/pagina/${page}/${pageSize}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
 
 
 export default {
     getProductById,
     updateProduct,
     getAllproducts,
-    updateStock
+    updateStock,
+    getPoductsForPages
 };
