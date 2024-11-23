@@ -27,7 +27,7 @@ public class ProcedimientosController {
     }
 
     @PostMapping("/aplicar_descuento")
-    public String aplicarDescuento(@RequestParam int idCategoria, @RequestParam double descuento) {
+    public String aplicarDescuento(@RequestParam int idCategoria, @RequestParam float descuento) {
         try {
             // Llamar al servicio para aplicar el descuento
             procedimientoService.aplicarDescuentoACategoria(idCategoria, descuento);

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.SqlOutParameter;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.math.BigDecimal;
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -66,18 +67,18 @@ public class ProcedimientosService {
         return reporteString.toString();
     }
 
-    public void aplicarDescuentoACategoria(int idCategoria, double descuento) {
+    public void aplicarDescuentoACategoria(int idCategoria, float descuento) {
         // Usar la sintaxis adecuada para invocar procedimientos almacenados
         String sql = "CALL aplicar_descuento_a_categoria(:idCategoria, :descuento)";  // Sintaxis correcta
 
+        BigDecimal nuevoDescuento = new BigDecimal(descuento);
         // Ejecutar el procedimiento con los parámetros correspondientes
         try (Connection con = sql2o.open()){
             con.createQuery(sql)
             .addParameter("idCategoria", idCategoria)
-                    .addParameter("descuento", descuento)
+                    .addParameter("descuento", nuevoDescuento.setScale(4, BigDecimal.ROUND_HALF_UP))
                     .executeUpdate();
         }
-        //jdbcTemplate.update(sql, idCategoria, descuento);
     }
 
 }
