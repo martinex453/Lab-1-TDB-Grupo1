@@ -24,9 +24,22 @@ Con esto ya se habrá creado la base de datos.
 
 3. Utilizando IntelliJ IDEA, ejecutar la aplicación haciendo clic en la opción "Run".
 
-4. Crear un usuario administrador por postman.
+4. Crear un usuario administrador por postman, usando POST y lo siguente:
+```sh
+http://localhost:8090/cliente/crear_cuenta
+```
+```sh
+{
+    "nombre": "admin",
+    "direccion": "1234",
+    "email": "admin@usach.cl",
+    "telefono": "12345678",
+    "contrasena": "123",
+    "rol": "admin"
+}
+```
 
-5. Dentro de la carpeta front-grupo1, abrir una consola y ejecutar los siguientes comandos en orden: 
+5. Dentro de la carpeta front-grupo1, abrir la consola y ejecutar los siguientes comandos en orden: 
 ```sh
 npm install axios
 npm install vue-cookies --sabe
