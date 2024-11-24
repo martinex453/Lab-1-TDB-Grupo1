@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Representa al usuario autenticado en el sistema, implementando la interfaz UserDetails de Spring Security.
+ *
+ * Esta clase se utiliza para adaptar la información del usuario a un formato que Spring Security pueda manejar
+ * en su proceso de autenticación y autorización.
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

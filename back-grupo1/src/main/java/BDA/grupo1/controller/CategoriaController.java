@@ -25,19 +25,19 @@ public class CategoriaController {
 
     @PostMapping("/categoria/crear")
     public Categoria create(@RequestBody Categoria categoria, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return categoriaService.crear(categoria);
     }
 
     @PostMapping("/categoria/update/{id}")
     public String update( @RequestBody Categoria categoria,@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return categoriaService.update(categoria,id);
     }
 
     @DeleteMapping("/categoria/delete/{id}")
     public void delete(@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         categoriaService.delete(id);
     }
 }

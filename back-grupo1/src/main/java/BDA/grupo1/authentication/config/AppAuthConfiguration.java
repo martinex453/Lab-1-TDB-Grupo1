@@ -16,6 +16,7 @@ public class AppAuthConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // Metodo que provee de autenticación para recuperar los detalles del usuario y luego compara la contraseña proporcionada con la almacenada.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -23,12 +24,13 @@ public class AppAuthConfiguration {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
+    // Metodo que se encarga de codificar las contraseñas, necesaria para el JWT
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Metodo que gestiona la verificacion de las credenciales
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

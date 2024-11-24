@@ -15,11 +15,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     ClienteService ClienteService;
 
+    // Metodo que obtiene el email del usuario a partir de su username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return getUserByEmail(username);
     }
 
+    // Metodo que obtiene el email del usuario
     public User getUserByEmail(String email) {
         Cliente cliente = ClienteService.getClienteByCorreo(email);
         if (cliente == null) {

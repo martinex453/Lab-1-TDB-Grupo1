@@ -14,10 +14,9 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
+    // Endpoint para manejar el inicio de sesión
     @PostMapping ("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request){
-        System.out.println("controlador");
-        System.out.println(request);
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

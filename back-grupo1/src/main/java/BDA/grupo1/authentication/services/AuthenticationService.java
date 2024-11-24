@@ -19,30 +19,24 @@ public class AuthenticationService {
     @Autowired
     UserService userService;
 
+    // Método encargado de autenticar a un usuario
     public AuthenticationResponse authenticate(LoginRequest request) {
+        // El AuthenticationManager se encarga de verificar las credenciales de usuario (correo y contraseña)
         try {
-            System.out.println("Llegue al AUTH");
-            System.out.println(request.getEmail());
-            System.out.println(request.getContrasena());
-
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getContrasena()
                     )
             );
-
-            System.out.println("SALIDEL AUTHENTICATE");
+            // Si la autenticación es exitosa, obtenemos el usuario de la base de datos, y luego obtenemos el token para retornarlo
             User user = userService.getUserByEmail(request.getEmail());
-            System.out.println("Salid del getuseremail");
-
-            System.out.println(user);
             String jwtToken = jwtService.generateToken(user.generateExtraClaims(), user);
-            System.out.println(jwtToken);
             return AuthenticationResponse.builder()
                     .token(jwtToken)
                     .build();
         } catch (Exception e) {
+            // En caso de que ocurra un error durante el proceso de autenticación
             System.out.println("Error en la autenticación: " + e.getMessage());
             throw new RuntimeException("Autenticación fallida");
         }
