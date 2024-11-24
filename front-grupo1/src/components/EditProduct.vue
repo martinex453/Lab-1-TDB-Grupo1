@@ -32,6 +32,7 @@
 <script>
 import productService from '@/services/productService';
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             product: null,
@@ -47,36 +48,44 @@ export default {
     },
     computed: {
         totalPrice() {
+            //Calcular el precio total del producto
             return this.product?.precio * this.amount;
         },
         productStock() {
+            //Calcular el stock del producto
             return this.product?.stock - 1;
         }
     },
     methods: {
         async getProduct(){
             try {
+                //Obtener el id del producto y buscarlo
                 const id = this.$route.params.id;
                 const response = await productService.getProductById(id, this.token);
+                //Asignar los valores del producto a las variables
                 this.product = response.data;
                 this.name = this.product.nombre;
                 this.description = this.product.descripcion;
                 this.stock = String(this.product.stock);
                 this.price = String(this.product.precio);
             } catch (error) {
+                //Mostrar un mensaje de error si no se encuentra el producto
                 alert('Error al buscar producto');
             }
         },
         validateAmount() {
+            //Validar la cantidad del producto
             if (this.amount < 1) {
                 this.amount = 0;
             }
         },
         async updateProduct(){
             try{
+                //Verificar si el campo de estado esta vacio
                 if(this.state === ""){
                     this.state = this.product.estado;
                 }
+                //Construir el objeto con los nuevos valores del producto
                 const newProduct = {
                     id_producto: this.product.id_producto,
                     nombre: this.name,
@@ -88,18 +97,22 @@ export default {
                 }
                 console.log(newProduct);
                 console.log(this.product.id_producto);
+                //Actualizar el producto
                 const userId = localStorage.getItem("idUser");
                 await productService.updateProduct(this.product.id_producto, newProduct, userId, this.token);
+                //Mostrar un mensaje de exito y redirigir a la pagina de productos
                 alert('Producto actualizado');
                 this.$router.push("/products");
             }
             catch(error){
+                //Mostrar un mensaje de error si no se puede actualizar el producto
                 alert('Error al actualizar producto');
             }
         }
 
     },
     mounted() {
+        //Llamar al metodo para obtener el producto
         this.getProduct();
     }
 }

@@ -35,6 +35,7 @@ import orderService from '@/services/orderService';
 import orderDetailService from '@/services/orderDetailService';
 
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             token: this.$cookies.get("jwt"),
@@ -45,6 +46,7 @@ export default {
     },
     methods: {
         async submitOrder(){
+            //Convertir el carrito de compras a un arreglo JSON
             const carritoJson = [];
             for(let i = 0; i < this.$carrito.length; i++){
                 const productoCarrito = {
@@ -59,27 +61,33 @@ export default {
             console.log(JSON.stringify(carritoJson));
             console.log(this.token);
             console.log(this.idUser);
+            //Enviar la orden de compra al servidor
             await orderService.submitOrder(carritoJson, this.idUser, this.token);
             alert("Orden realizada con éxito");
+            //Limpiar el carrito de compras
             this.$carrito.splice(0, this.$carrito.length);
             this.updateCarrito();
             console.log(this.$carrito);
             this.loadCart();
+            //Obtener los nombres de los productos y calcular el precio total
             await this.fetchProductNames();
             this.calculateTotalPrice();
         },
         loadCart() {
+            //Obtener el carrito de compras del almacenamiento local
             const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+            //Convertir el carrito de compras a un arreglo de productos
             this.totalOrderDetail = carrito.map(item => {
                 return {
-                    id: item[0], // ID del producto
-                    cantidad: item[1], // Cantidad
-                    precio_unitario: item[2], // Precio unitario
-                    name: '' // Nombre del producto, se llenará después
+                    id: item[0],
+                    cantidad: item[1],
+                    precio_unitario: item[2],
+                    name: ''
                 };
             });
         },
         async fetchProductNames() {
+            //Obtener los nombres de los productos en el carrito
             for (const detail of this.totalOrderDetail) {
                 const productResponse = await productService.getProductById(detail.id, this.token);
                 console.log(productResponse.data.nombre);
@@ -87,12 +95,14 @@ export default {
             }
         },
         calculateTotalPrice() {
+            //Calcular el precio total de la orden de compra
             this.totalPrice = this.totalOrderDetail.reduce((total, item) => {
                 return total + (item.precio_unitario * item.cantidad);
             }, 0);
         },
     },
     async created() {
+        //Cargar el carrito de compras, obtener los nombres de los productos y calcular el precio total al cargar el componente
         this.loadCart();
         await this.fetchProductNames();
         this.calculateTotalPrice();

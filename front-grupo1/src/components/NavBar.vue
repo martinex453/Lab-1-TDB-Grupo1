@@ -16,11 +16,12 @@
 export default {
   computed: {
     isRegisterLogin() {
+      //Redirigir a la página de inicio si el usuario no está registrado
       return this.$route.path === '/';
     },
     isAdmin() {
-      // Local storage no esta bien, hay que buscar otra solcuion
-      const userRole = localStorage.getItem("userRole"); // Asegúrate de que el rol se almacene en localStorage
+      //Verificar si el usuario es administrador
+      const userRole = localStorage.getItem("userRole");
       return userRole === 'admin';
     }
   }

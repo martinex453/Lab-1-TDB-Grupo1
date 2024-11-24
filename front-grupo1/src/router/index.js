@@ -8,6 +8,7 @@ import MyOrders from '../components/MyOrders.vue';
 import EditProduct from '../components/EditProduct.vue';
 import ProcedimientosAlmacenados from '../components/ProcedimientosAlmacenados.vue';
 
+//Definir las rutas de la aplicacion
 const routes = [
     {
         path: '/',
@@ -59,23 +60,24 @@ const routes = [
     }
 ];
 
+//Crear el router
 const router = createRouter({
     history: createWebHistory(),
     routes,
   });
   
-
-  router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAdmin)) {
-      const userRole = localStorage.getItem("userRole");
-      if (userRole === 'admin') {
-        next();
-      } else {
-        next({ name: 'products' });
-      }
-    } else {
+//Proteger las rutas exclusivas para usuarios admin
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAdmin)) {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === 'admin') {
       next();
+    } else {
+      next({ name: 'products' });
     }
-  });
+  } else {
+    next();
+  }
+});
   
-  export default router;
+export default router;

@@ -3,6 +3,7 @@ import clienteService from "../services/clientServices.js";
 import { jwtDecode } from "jwt-decode";
 
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             register: false, 
@@ -16,10 +17,12 @@ export default {
     methods: {
         async submitForm() {
             if (this.register) {
+                //Si el usuario desea registrarse se validan los campos
                 if (!this.nombre || !this.email || !this.direccion || !this.telefono || !this.contrasena) {
                     alert("Por favor, llene todos los campos.");
                     return;
                 }
+                //Crear un objeto con los datos del cliente
                 const cliente = {
                     nombre: this.nombre, 
                     email: this.email,
@@ -30,26 +33,33 @@ export default {
                 };
 
                 try {
+                    //Registrar el cliente en la base de datos
                     const response = await clienteService.createCliente(cliente);
                     console.log("Registro exitoso:", response.data);
                     alert("Usuario registrado correctamente");
+                    //Limpiar los campos del formulario y cambiar a la vista de inicio de sesión
                     this.resetForm();
                     this.register = false;
                 } catch (error) {
+                    //Mostrar un mensaje de error si no se puede registrar el usuario
                     console.error("Error al registrar el usuario:", error.response?.data || error.message);
                     alert("Hubo un error al registrar el usuario.");
                 }
             } else {
+                //Si el usuario desea iniciar sesión se validan los campos
                 if (!this.email || !this.contrasena) {
                     alert("Por favor, llene todos los campos.");
                     return;
                 }
                 try {
+                    //Iniciar sesión con el correo y la contraseña proporcionados
                     const response = await clienteService.loginCliente(this.email, this.contrasena); 
                     const token = response.data.token;
+                    //Guardar el token en las cookies y el id del usuario en el local storage
                     this.$cookies.set("jwt", token, "1d");
                     const decoded = jwtDecode(token);
                     const id = decoded.id;
+                    //Obtener el rol del usuario y guardarlo en el local storage
                     const responseRole = await clienteService.getRole(id, token);
                     const role = responseRole.data;
                     localStorage.setItem("idUser", id);
@@ -58,12 +68,14 @@ export default {
                     alert("Inicio de sesión exitoso");
                     this.$router.push("/products");
                 } catch (error) {
+                    //Mostrar un mensaje de error si no se puede iniciar sesión
                     console.error("Error al iniciar sesión:", error.response?.data || error.message);
                     alert("Correo o contraseña incorrectos.");
                 }
             }
         },
         resetForm() {
+            //Limpiar los campos del formulario
             this.nombre = '';  
             this.email = '';
             this.direccion = '';  

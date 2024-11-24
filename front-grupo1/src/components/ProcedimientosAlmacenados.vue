@@ -42,6 +42,7 @@ import categoryService from '../services/categoryService';
 import clienteService from "../services/clientServices.js"; 
 import productService from "../services/productService.js";
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             isDiscountView: true,
@@ -55,30 +56,38 @@ export default {
     },
     methods: {
         toggleView(view) {
+            //Cambiar la vista del procedimiento almacenado
             this.isDiscountView = view === 'discount';
             this.isTopClientsView = view === 'topClients';
             this.isTopSpendersView = view === 'topSpenders';
-            this.results = ''; // Limpiar los resultados al cambiar de vista
+            //Limpiar los resultados al cambiar de vista
+            this.results = '';
         },
         async applyDiscount() {
+            //Aplicar un descuento a una categoría de productos
             await productService.applyDiscount(this.$cookies.get("jwt"), this.selectedCategory.id_categoria, this.discount);
             alert("Descuento aplicado correctamente");
         },
         async fetchTopClients() {
+            //Obtener los usuarios con más querys
             const response = await clienteService.getTopUsers(this.$cookies.get("jwt"));
-            this.results = response.data; // Asignar el string directamente
+            //Asignar el string directamente
+            this.results = response.data; 
         },
         async fetchTopSpenders() {
+            //Obtener los usuarios que más gastaron en tecnología
             const response = await clienteService.getTopSpenders(this.$cookies.get("jwt"));
-            // Formatear los resultados como una lista con viñetas
+            //Formatear los resultados
             this.results = response.data.map((user, index) => `${index + 1}. ${user.cliente}, total gastado:${user.totalgastado}`).join('\n');
         },
         async loadCategories() {
+            //Obtener las categorías de productos y asignarlas a la variable
             const response = await categoryService.getAll(this.$cookies.get("jwt"));
             this.categories = response.data;
         }
     },
     mounted() {
+        //Cargar las categorías al cargar el componente
         this.loadCategories();
     }
 }

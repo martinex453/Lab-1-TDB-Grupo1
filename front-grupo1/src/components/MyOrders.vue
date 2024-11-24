@@ -40,52 +40,63 @@
 import orderService from '@/services/orderService';
 
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             orders: [],
             isAdmin: false,
-            page: 1, // Número de página actual
-            pageSize: 12, // Tamaño de la página
+            page: 1, //Numero de página actual
+            pageSize: 12, //Tamaño de la página
             id_user: localStorage.getItem('idUser'),
             token: this.$cookies.get("jwt"),
         };
     },
     methods: {
         async getOrders() {
+            //Obtener el token de autenticación y el rol del usuario
             const token = this.$cookies.get("jwt");
             const userRole = localStorage.getItem("userRole");
 
+            //Verificar si el usuario es administrador
             this.isAdmin = userRole === 'admin';
-
+            
             try {
                 if (this.isAdmin) {
+                    //Obtener las órdenes de compra si el usuario es administrador
                     const response = await orderService.getOrders(this.page, this.pageSize, token);
                     this.orders = response.data;
                 } else {
+                    //Obtener el id del usuario y buscar sus órdenes de compra
                     const id = localStorage.getItem('idUser');
                     const response = await orderService.getOrderByUserId(id, this.page, this.pageSize, token);
                     this.orders = response.data;
                 }
             } catch (error) {
+                //Mostrar un mensaje de error si no se pueden obtener las órdenes
                 console.error("Error al obtener órdenes:", error);
             }
         },
         async sendOrder(order) {
             try {
+                //Cambiar el estado de la orden a 'enviada'
                 console.log(order);
                 order.estado = 'enviada';
                 await orderService.updateOrder(order.id_orden, order, this.id_user, this.token);
+                //Actualizar la lista de órdenes
                 this.getOrders();
                 alert('Orden enviada correctamente');
             } catch (error) {
+                //Mostrar un mensaje de error si no se puede enviar la orden
                 console.error("Error al enviar la orden:", error);
                 alert('Error al enviar la orden');
             }
         },
         goToOrderDetail(orderId) {
+            //Redirigir a la página de detalles de la orden
             this.$router.push(`/order/${orderId}`);
         },
         formatDate(date) {
+            //Formatear la fecha de la orden
             const newDate = new Date(date);
             return newDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -94,18 +105,19 @@ export default {
             });
         },
         async changePage(newPage) {
-            this.page = newPage; // Cambia la página actual
-            await this.getOrders(); // Obtiene las órdenes de la nueva página
+            //Cambiar la página actual y obtener las órdenes de la nueva página
+            this.page = newPage;
+            await this.getOrders();
         }
     },
     mounted() {
+        //Llamar al método para obtener las órdenes de compra
         this.getOrders();
     }
 };
 </script>
 
 <style scoped>
-/* Estilos existentes */
 .container-order-summary {
     display: grid;
     grid-template-columns: 1fr;
@@ -179,8 +191,8 @@ button:hover {
 .pagination-container {
     display: flex;
     justify-content: center;
-    gap: 10px; /* Espaciado entre los botones */
-    margin-top: 20px; /* Espacio extra superior */
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .pageButton {

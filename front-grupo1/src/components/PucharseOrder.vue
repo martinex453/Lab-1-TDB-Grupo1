@@ -3,13 +3,9 @@ import productService from '@/services/productService';
 import orderService from '@/services/orderService';
 import orderDetailService from '@/services/orderDetailService';
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
-            //name: "Caja de carton",
-            //description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-            //stock: 1,
-            //state: "Disponible",
-            //price: 100,
             product: null,
             amount: 1,
             token: this.$cookies.get("jwt"),
@@ -18,52 +14,62 @@ export default {
     },
     computed: {
         totalPrice() {
+            //Calcular el precio total del producto
             return this.product?.precio * this.amount;
         },
         productStock() {
+            //Calcular el stock del producto
             return this.product?.stock - 1;
         }
     },
     methods: {
         async getProduct(){
             try {
+                //Obtener el id del producto y buscarlo
                 const id = this.$route.params.id;
                 const response = await productService.getProductById(id, this.token);
                 this.product = response.data;
             } catch (error) {
+                //Mostrar un mensaje de error si no se encuentra el producto
                 alert('Error al obtener producto');
             }
         },
         async makeOrder(){
             try {
                 if(this.amount > this.product.stock){
+                    //Mostrar un mensaje si no hay suficiente stock
                     alert('No hay suficiente stock');
                     return;
                 }
+                //Buscar si el producto ya está en el carrito y actualizar la cantidad
                 for(let i = 0; i < this.$carrito.length; i++){
                     if(this.$carrito[i][0] == this.$route.params.id){
                         this.$carrito[i][1] += this.amount;
-                        this.updateCarrito(); // Actualiza el carrito en localStorage
+                        this.updateCarrito();
                         return;
                     }
                 }
+                //Agregar el producto al carrito y actualizarlo
                 const product_list = [this.$route.params.id, this.amount, this.product.precio];
                 this.$carrito.push(product_list);
-                this.updateCarrito(); // Actualiza el carrito en localStorage
+                this.updateCarrito();
                 alert('Producto agregado al carrito');
                 console.log(this.$carrito);
             } catch (error) {
+                //Mostrar un mensaje de error si no se puede realizar la orden
                 alert('Error al realizar orden');
             }
         },
         validateAmount() {
+            //Validar la cantidad del producto
             if (this.amount < 1) {
-                this.amount = 0; // Restablecer al mínimo permitido
+                this.amount = 0;
             }
         }
 
     },
     mounted() {
+        //Obtener el producto al cargar el componente
         this.getProduct();
     }
 }

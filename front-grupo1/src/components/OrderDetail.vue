@@ -37,6 +37,7 @@ import orderService from '@/services/orderService';
 import orderDetailService from '@/services/orderDetailService';
 
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             totalOrderDetail: [],
@@ -47,34 +48,40 @@ export default {
     },
     methods: {
         async getTotalOrderDetail() {
+            //Obtener el id de la orden de compra
             const orderId = this.$route.params.id;
             
             if (!orderId) {
+                //Mostrar un mensaje de error si no se encuentra la orden de compra
                 alert("No se ha encontrado una orden de compra.");
                 return;
             }
             try {
                 console.log(orderId);
+                //Obtener los detalle de la orden de compra
                 const response = await orderDetailService.getOrderDetailByOrderId(orderId, this.token);
                 this.totalOrderDetail = response.data;
                 console.log(response);
                 console.log(this.totalOrderDetail);
+                //Obtener los nombres de los productos
                 for (const detail of this.totalOrderDetail) {
                     const productResponse = await productService.getProductById(detail.id_producto, this.token);
                     console.log(productResponse.data.nombre);
                     detail.name = productResponse.data.nombre;
                     console.log(detail);
                 }
-
+                //Obtener el precio total de la orden de compra y su estado
                 const total = await orderService.getOrderById(orderId, this.token);
                 this.totalPrice = total.data.total;
                 this.orderStatus = total.data.estado;
             } catch (error) {
+                //Mostrar un mensaje de error si no se pueden obtener los detalles de la orden de compra
                 alert('Error al obtener detalle de orden');
             }
         }
     },
     created() {
+        //Obtener los detalles de la orden de compra al cargar el componente
         this.getTotalOrderDetail();
     }
 };

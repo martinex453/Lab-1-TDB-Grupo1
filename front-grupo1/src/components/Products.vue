@@ -23,6 +23,7 @@
 import productService from '../services/productService.js';
 
 export default {
+    //Definir las propiedades del componente
     data() {
         return {
             products: [],
@@ -33,35 +34,44 @@ export default {
     },
     computed: {
         showPrevButton() {
+            //Verificar si se puede mostrar el botón de página anterior
             return this.page > 1;
         },
         showNextButton() {
+            //Verificar si se puede mostrar el botón de página siguiente
             return this.products.length === this.pageSize;
         },
     },
     methods: {
         async getProducts() {
             try {
+                //Obtener el token de autenticación
                 const token = this.$cookies.get("jwt");
+                //Obtener los productos para la página actual
                 const response = await productService.getPoductsForPages(this.page, this.pageSize, token);
                 this.products = response.data;
             } catch (error) {
+                //Mostrar un mensaje de error si no se pueden obtener los productos
                 console.error(error);
             }
         },
         productDetails(product) {
+            //Redirigir al usuario a la página de compra del producto
             this.$router.push(`/purchase/${product.id_producto}`);
         },
         async changePage(newPage) {
+            //Cambiar la página actual y obtener los productos, si es posible
             if (newPage < 1) return;
             this.page = newPage;
             this.getProducts();
         },
         editProduct(productId) {
+            //Redirigir al usuario a la página de edición del producto
             this.$router.push(`/edit-product/${productId}`);
         },
     },
     mounted() {
+        //Obtener los productos al cargar el componente
         this.getProducts();
     },
 };
