@@ -30,6 +30,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'   // Implementación de JWT
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // Integración con Jackson para parsear JSON
 	implementation 'org.sql2o:sql2o:1.8.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
 	// AGREGADOS
 	implementation 'org.springframework.boot:spring-boot-starter-security'

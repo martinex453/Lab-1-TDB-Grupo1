@@ -72,8 +72,9 @@ export default {
         },
         async sendOrder(order) {
             try {
+                console.log(order);
                 order.estado = 'enviada';
-                await orderService.updateOrder(order.id, order, this.id_user, this.token);
+                await orderService.updateOrder(order.id_orden, order, this.id_user, this.token);
                 this.getOrders();
                 alert('Orden enviada correctamente');
             } catch (error) {

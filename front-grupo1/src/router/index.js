@@ -6,6 +6,7 @@ import totalOrderDetail from '../components/totalOrderDetail.vue';
 import OrderDetail from '../components/OrderDetail.vue';
 import MyOrders from '../components/MyOrders.vue';
 import EditProduct from '../components/EditProduct.vue';
+import ProcedimientosAlmacenados from '../components/ProcedimientosAlmacenados.vue';
 
 const routes = [
     {
@@ -49,12 +50,32 @@ const routes = [
         name: 'MyOrders',
         component: MyOrders,
         meta: { requiresAuth: true}
+    },
+    {
+        path: '/procedures',
+        name: 'procedure',
+        component: ProcedimientosAlmacenados,
+        meta: { requiresAuth: true, requiresAdmin: true}
     }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+  });
+  
+
+  router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAdmin)) {
+      const userRole = localStorage.getItem("userRole");
+      if (userRole === 'admin') {
+        next();
+      } else {
+        next({ name: 'products' });
+      }
+    } else {
+      next();
+    }
   });
   
   export default router;

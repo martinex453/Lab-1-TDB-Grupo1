@@ -72,5 +72,5 @@ public class ClienteService {
                 .orElseThrow(() -> new UsernameNotFoundException("No existe el cliente"));
     }
 
-    public List<Cliente> top5Clientes() { return clienteRepository.top5Clientes(); }
+    public String top5Clientes() { return clienteRepository.top5Clientes(); }
 }

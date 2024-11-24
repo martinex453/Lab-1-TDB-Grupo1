@@ -42,6 +42,13 @@ const getPoductsForPages = (page, pageSize, token) => {
     });
 }
 
+const applyDiscount = (token, idCategory, discount) =>{
+    return httpClient.get(`/aplicar_descuento?idCategoria=${idCategory}&descuento=${discount}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
 
 
 export default {
@@ -49,5 +56,6 @@ export default {
     updateProduct,
     getAllproducts,
     updateStock,
-    getPoductsForPages
+    getPoductsForPages,
+    applyDiscount
 };

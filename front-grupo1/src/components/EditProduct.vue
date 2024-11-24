@@ -74,6 +74,9 @@ export default {
         },
         async updateProduct(){
             try{
+                if(this.state === ""){
+                    this.state = this.product.estado;
+                }
                 const newProduct = {
                     id_producto: this.product.id_producto,
                     nombre: this.name,

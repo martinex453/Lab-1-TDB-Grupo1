@@ -6,6 +6,7 @@
         <router-link to="/products" class="navbar-link">Productos</router-link>
         <router-link to="/myOrders" class="navbar-link">Mis Ordenes</router-link>
         <router-link to="/order" class="navbar-link">Carrito</router-link>
+        <router-link v-if="isAdmin" to="/procedures" class="navbar-link">Procedimientos</router-link>
       </div>
     </div>
   </nav>

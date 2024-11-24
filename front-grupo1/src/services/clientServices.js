@@ -22,10 +22,28 @@ const getRole = (id, token) => {
     });
 };
 
+const getTopUsers = (token) => {
+    return httpClient.get(`/top_usuarios`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+const getTopSpenders = (token) => {
+    return httpClient.get("/cliente/getTop5", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
 
 export default {
     createCliente,
     loginCliente,
-    getRole
+    getRole,
+    getTopUsers,
+    getTopSpenders
 };
 
