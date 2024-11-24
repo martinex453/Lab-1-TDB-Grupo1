@@ -74,7 +74,7 @@ public class OrdenRepositoryImp implements OrdenRepository{
 
     public List<Orden> getOrdenPages(int page, int pageSize){
         try (Connection con = sql2o.open()) {
-            String sql = "SELECT * FROM orden ORDER BY id_orden LIMIT :pageSize OFFSET :offset ";
+            String sql = "SELECT * FROM orden ORDER BY CASE WHEN estado = 'pagada' THEN 1 ELSE 2 END, id_orden LIMIT :pageSize OFFSET :offset";
             Integer offset = (page - 1) * pageSize;
 
             try (Connection con2 = sql2o.open()) {
