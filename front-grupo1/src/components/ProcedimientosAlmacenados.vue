@@ -17,7 +17,7 @@
                                 {{ category.nombre }}
                             </option>
                         </select>
-                        <input type="number" step="0.001" min="0" v-model="discount" placeholder="Ingrese el descuento" class="styled-input" required>
+                        <input type="number" step="0.001" min="0" max="1" v-model="discount" placeholder="Ingrese el descuento" class="styled-input" required>
                         <button type="submit">Aplicar Descuento</button>
                     </form>
                 </div>
@@ -30,9 +30,10 @@
             </div>
         </div>
         <div v-if="results" class="results-container">
-            <h2>Resultados</h2>
-            <pre>{{ results }}</pre>
-        </div>
+        <h2>Resultados</h2>
+        <pre class="results-text">{{ results }}</pre>
+    </div>
+
     </div>
 </template>
 
@@ -151,6 +152,14 @@ export default {
     overflow-y: auto;
     margin-top: 20px;
 }
+
+.results-text {
+    color: #000;
+    font-size: 16px; 
+    line-height: 1.5; 
+    white-space: pre-wrap; 
+}
+
 
 button {
     width: 100%;

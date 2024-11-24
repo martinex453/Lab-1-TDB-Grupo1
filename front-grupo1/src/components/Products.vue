@@ -7,8 +7,8 @@
                 <h2>{{ product.nombre }}</h2>
                 <p>{{ product.descripcion }}</p>
                 <h3>Precio: ${{ product.precio }} CLP</h3>
-                <h4>Stock: {{ product.stock }}</h4>
-                <button class="purchase-button" @click="productDetails(product)">Comprar</button>
+                <h4>Stock: {{ product.stock === 0 ? 'Producto no disponible' : product.stock }}</h4>
+                <button class="purchase-button" v-if="product.stock > 0" @click="productDetails(product)">Comprar</button>
                 <button v-if="this.isAdmin" class="edit-button" @click="editProduct(product.id_producto)">Editar</button>
             </div>
         </div>
@@ -136,7 +136,6 @@ export default {
 .edit-button:hover {
     background-color: #2563eb;
 }
-
 
 .product-img {
     width: 100%;
