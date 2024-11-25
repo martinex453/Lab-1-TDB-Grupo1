@@ -139,6 +139,10 @@ CREATE OR REPLACE PROCEDURE reporte_top_usuarios_querys()
 LANGUAGE plpgsql
 AS $$
 BEGIN
+
+	-- Verificar y eliminar la tabla temporal si existe
+    DROP TABLE IF EXISTS tmp_reporte_top_usuarios;
+
     -- Crear la tabla temporal
     CREATE TEMP TABLE IF NOT EXISTS tmp_reporte_top_usuarios (
         nombre_cliente VARCHAR(255),
