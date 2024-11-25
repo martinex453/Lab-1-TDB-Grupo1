@@ -22,7 +22,7 @@ public class DetalleOrdenController {
 
     @PostMapping("/detalleOrden/crear")
     public DetalleOrden crearDetalleOrden(@RequestBody DetalleOrden detalleOrden, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return detalleOrdenService.crear(detalleOrden);
     }
 
@@ -38,13 +38,13 @@ public class DetalleOrdenController {
 
     @PostMapping("/detalleOrden/update/{id}")
     public String updateDetalleOrden(@RequestBody DetalleOrden detalleOrden, @PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return detalleOrdenService.update(detalleOrden, id);
     }
 
     @DeleteMapping("/detalleOrden/delete/{id}")
     public void deleteDetalleOrden(@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         detalleOrdenService.delete(id);
     }
 

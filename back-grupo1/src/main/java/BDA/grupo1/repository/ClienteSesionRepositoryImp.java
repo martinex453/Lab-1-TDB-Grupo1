@@ -15,6 +15,7 @@ public class ClienteSesionRepositoryImp implements ClienteSesionRepository {
     @Override
     public Integer crear(Integer cliente_id) {
         try (Connection con = sql2o.open()) {
+            // query para insertar el id del cliente en la tabla cliente_sesion
             String sql = "INSERT INTO cliente_sesion (cliente_id)"
                     + "VALUES (:cliente_id)";
             con.createQuery(sql)
@@ -22,7 +23,7 @@ public class ClienteSesionRepositoryImp implements ClienteSesionRepository {
                     .executeUpdate();
             return cliente_id;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()); // mensaje en caso de error
             return null;
         }
     }
@@ -30,11 +31,12 @@ public class ClienteSesionRepositoryImp implements ClienteSesionRepository {
     @Override
     public void deleteAll(){
         try (Connection con = sql2o.open()) {
+            // query para eliminar todos los elementos de la tabla cliente_sesion
             String sql = "DELETE FROM cliente_sesion";
             con.createQuery(sql)
                     .executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()); // mensaje en caso de error
         }
     }
 }

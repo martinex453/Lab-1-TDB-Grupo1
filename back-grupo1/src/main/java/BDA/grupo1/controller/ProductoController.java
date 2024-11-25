@@ -20,7 +20,7 @@ public class ProductoController {
 
     @PostMapping("/producto/crear")
     public Producto crearProducto(@RequestBody Producto producto, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return productoService.crear(producto);
     }
 
@@ -31,7 +31,7 @@ public class ProductoController {
 
     @PostMapping("/producto/update/{id}")
     public String updateProducto(@RequestBody Producto producto, @PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return productoService.update(producto,id);
     }
 
@@ -42,7 +42,7 @@ public class ProductoController {
 
     @DeleteMapping("/producto/delete/{id}")
     public void deleteProducto(@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         productoService.delete(id);
     }
 
@@ -53,7 +53,7 @@ public class ProductoController {
 
     @PutMapping("/producto/updateStock/{id}/{stock}")
     public void updateProductoStock(@PathVariable Integer id, @PathVariable Integer stock, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         productoService.updateProductoStock(id,stock);
     }
 }

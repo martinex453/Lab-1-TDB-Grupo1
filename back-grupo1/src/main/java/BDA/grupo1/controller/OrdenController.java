@@ -21,7 +21,7 @@ public class OrdenController {
 
     @PostMapping("/orden/crear")
     public Orden crearOrden(@RequestBody Orden orden, @RequestParam Integer id) {
-        clienteSesionService.crear(id);
+        clienteSesionService.crear(id); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return ordenService.crear(orden);
     }
 
@@ -32,13 +32,13 @@ public class OrdenController {
 
     @PostMapping("/orden/update/{id}")
     public String updateOrden(@RequestBody Orden orden, @PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         return ordenService.update(orden,id);
     }
 
     @DeleteMapping("/orden/delete/{id}")
     public void deleteOrden(@PathVariable Integer id, @RequestParam Integer id_cliente) {
-        clienteSesionService.crear(id_cliente);
+        clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
         ordenService.delete(id);
     }
 

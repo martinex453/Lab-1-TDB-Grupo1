@@ -22,7 +22,7 @@ public class ProcedimientosController {
     @GetMapping("/top_usuarios")
     public ResponseEntity<String> obtenerReporteTopUsuarios() {
         try {
-            String reporte = procedimientoService.generarReporteAgrupado();
+            String reporte = procedimientoService.generarReporteAgrupado(); // llamar al servicio para ejecutar el procedimiento
             return ResponseEntity.ok(reporte);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -33,7 +33,7 @@ public class ProcedimientosController {
     @GetMapping("/aplicar_descuento")
     public String aplicarDescuento(@RequestParam int idCategoria, @RequestParam float descuento) {
         try {
-            procedimientoService.aplicarDescuentoACategoria(idCategoria, descuento);
+            procedimientoService.aplicarDescuentoACategoria(idCategoria, descuento); // llamar al servicio para ejecutar el procedimiento
             return "Descuento aplicado correctamente.";
         } catch (Exception e) {
             return "Error al aplicar el descuento: " + e.getMessage();
@@ -43,8 +43,8 @@ public class ProcedimientosController {
     @PostMapping("/crearOrdenCompra/{id_cliente}")
     public String crearOrden(@PathVariable int id_cliente, @RequestBody List<DetalleOrden> detalles) {
        try{
-           clienteSesionService.crear(id_cliente);
-           procedimientoService.crearOrdenCompra(id_cliente, detalles);
+           clienteSesionService.crear(id_cliente); // Registra la sesión del cliente para que sea usado por el trigger de registro de querys
+           procedimientoService.crearOrdenCompra(id_cliente, detalles); // llamar al servicio para ejecutar el procedimiento
            return "Orden de compra realizada con exito.";
        } catch (Exception e) {
            return "Error al crear la orden de compra: " + e.getMessage();

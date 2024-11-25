@@ -17,6 +17,7 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
 
     public DetalleOrden crear(DetalleOrden detalleOrden) {
         try (Connection con = sql2o.open()) {
+            // query para crear un detalle de orden
             String sql = "INSERT INTO detalle_orden (id_orden, id_producto, cantidad, precio_unitario) " +
                     "VALUES (:id_orden, :id_producto, :cantidad, :precio_unitario)";
             con.createQuery(sql)
@@ -24,26 +25,28 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
                     .addParameter("id_producto", detalleOrden.getId_producto())
                     .addParameter("cantidad", detalleOrden.getCantidad())
                     .addParameter("precio_unitario", detalleOrden.getPrecio_unitario())
-                    .executeUpdate();
+                    .executeUpdate(); // ejecución de la query
             return detalleOrden;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()); // mensaje en caso de error
             return null;
         }
     }
 
     public List<DetalleOrden> getAll() {
         try (Connection con = sql2o.open()) {
+            // query para obtener todos los detalles de orden de la tabla
             String sql = "SELECT * FROM detalle_orden";
             return con.createQuery(sql).executeAndFetch(DetalleOrden.class);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()); // mensaje en caso de error
             return null;
         }
     }
 
     public String update(DetalleOrden detalleOrden, Integer id_detalle) {
         try (Connection con = sql2o.open()) {
+            // query para actualizar los datos del detalle de una orden
             String sql = "UPDATE detalle_orden SET id_orden = :id_orden, id_producto = :id_producto, " +
                     "cantidad = :cantidad, precio_unitario = :precio_unitario WHERE id_detalle = :id_detalle";
             con.createQuery(sql)
@@ -52,7 +55,7 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
                     .addParameter("id_producto", detalleOrden.getId_producto())
                     .addParameter("cantidad", detalleOrden.getCantidad())
                     .addParameter("precio_unitario", detalleOrden.getPrecio_unitario())
-                    .executeUpdate();
+                    .executeUpdate(); // ejecución de la query
             return "Se actualizó el detalle de la orden con éxito";
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -62,6 +65,7 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
 
     public void delete(Integer id_detalle) {
         try (Connection con = sql2o.open()) {
+            // query para eliminar un detalle de orden según su id
             String sql = "DELETE FROM detalle_orden WHERE id_detalle = :id_detalle";
             con.createQuery(sql)
                     .addParameter("id_detalle", id_detalle)
@@ -73,6 +77,7 @@ public class DetalleOrdenRepositoryImp implements DetalleOrdenRepository{
 
     public List<DetalleOrden> getdetalleOrdenByOrdenId(Integer id_orden) {
         try (Connection con = sql2o.open()) {
+            // query para obtener los detalles de orden ordenados según su identificador
             String sql = "SELECT * FROM detalle_orden WHERE id_orden = :id_orden";
             return con.createQuery(sql)
                     .addParameter("id_orden", id_orden)

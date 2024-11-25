@@ -24,6 +24,7 @@ public class ProcedimientosService {
     @Autowired
     private Sql2o sql2o;
 
+    // generar el reporte de los usuarios con más querys mediante el llamado al procedimiento almacenado
     public Map<String, List<String>> obtenerReporteAgrupado() {
         // Llamar al procedimiento almacenado para crear la tabla temporal
         jdbcTemplate.execute("CALL reporte_top_usuarios_querys()");
@@ -45,6 +46,7 @@ public class ProcedimientosService {
         return reporte;
     }
 
+    // servicio que llama a obtenerReporteAgrupado para darle un formato al top de clientes
     public String generarReporteAgrupado() {
         Map<String, List<String>> reporteAgrupado = obtenerReporteAgrupado();
 
@@ -65,19 +67,21 @@ public class ProcedimientosService {
         return reporteString.toString();
     }
 
+    // aplicar descuento a los articulos de una categoría si no hay ventas en los últimos 30 días
     public void aplicarDescuentoACategoria(int idCategoria, float descuento) {
-        String sql = "CALL aplicar_descuento_a_categoria(:idCategoria, :descuento)";
+        String sql = "CALL aplicar_descuento_a_categoria(:idCategoria, :descuento)"; // llamado al procedimiento almacenado
         BigDecimal nuevoDescuento = new BigDecimal(descuento);
         try (Connection con = sql2o.open()){
             con.createQuery(sql)
             .addParameter("idCategoria", idCategoria)
                     .addParameter("descuento", nuevoDescuento.setScale(4, BigDecimal.ROUND_HALF_UP))
-                    .executeUpdate();
+                    .executeUpdate(); // ejecución del procedimiento
         }
     }
 
+    // crear una orden de compra mediante un procedimiento almacenado
     public String crearOrdenCompra(int idCliente, List<DetalleOrden> detalles) throws JSONException {
-        JSONArray detallesJson = new JSONArray();
+        JSONArray detallesJson = new JSONArray(); // arreglo con los detalles de orden
         for (DetalleOrden detalle : detalles) {
             JSONObject detalleJson = new JSONObject();
             detalleJson.put("id_producto", detalle.getId_producto());
@@ -86,7 +90,7 @@ public class ProcedimientosService {
             detallesJson.put(detalleJson);
         }
         String detallesJsonString = detallesJson.toString();
-        String sql = "CALL registrar_orden(:p_id_cliente, :lista_detalleOrden::json)";
+        String sql = "CALL registrar_orden(:p_id_cliente, :lista_detalleOrden::json)"; // añadir parámetros a la query
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("p_id_cliente", idCliente)

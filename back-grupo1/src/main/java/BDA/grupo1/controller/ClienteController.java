@@ -2,7 +2,6 @@ package BDA.grupo1.controller;
 
 import BDA.grupo1.model.Cliente;
 import BDA.grupo1.service.ClienteService;
-import BDA.grupo1.service.ClienteSesionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +13,6 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
-
-    @Autowired
-    private ClienteSesionService clienteSesionService;
 
     @PostMapping("/cliente/crear")
     public Cliente crearCliente(@RequestBody Cliente cliente) {
