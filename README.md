@@ -10,6 +10,8 @@ Para poder conectarse correctamente con la base de datos y el backend, asegurate
  
 2. En caso de modificar la dirección del servidor o el puerto en application.properties, actualiza también el archivo .env en el frontend para asegurar que ambos coincidan.
 
+3. Por defecto la aplicación se ejecuta en el puerto 5173.
+
 ## Requisitos previos
 Para ejecutar correctamente todo el proyecto, además de los archivos del repositorio se requieren las siguientes tecnologías:
 * Postgres SQL versión 12.22.
@@ -18,6 +20,7 @@ Para ejecutar correctamente todo el proyecto, además de los archivos del reposi
 * VUE versión 3.
 * Postman.
 * Visual Studio Code.
+* Gradle 8.10.2.
 
 ## Instrucciones de uso
 1. Clona el repositorio en tu máquina local usando el siguiente comando:
@@ -42,22 +45,40 @@ Esto creará la estructura de la base de datos necesaria para la aplicación.
 * Abre la carpeta back-grupo1 en IntelliJ IDEA.
 * Ejecuta la aplicación haciendo clic en la opción "Run".
 
-4. Crear un usuario administrador
-Utiliza Postman para crear un usuario administrador enviando una solicitud POST a:
+4. Crear usuarios administradores
+Utiliza Postman para crear un primer usuario administrador enviando una solicitud POST a:
 ```sh
 http://localhost:8090/cliente/crear_cuenta
 ```
 Con el siguiente cuerpo JSON:
 ```sh
 {
-    "nombre": "admin",
+    "nombre": "admin1",
     "direccion": "1234",
-    "email": "admin@usach.cl",
+    "email": "admin1@usach.cl",
     "telefono": "12345678",
     "contrasena": "123",
     "rol": "admin"
 }
 ```
+
+Luego crea un segundo usuario administrador enviando una solicitud POST a:
+```sh
+http://localhost:8090/cliente/crear_cuenta
+```
+Con el siguiente cuerpo JSON:
+```sh
+{
+    "nombre": "admin2",
+    "direccion": "1234",
+    "email": "admin2@usach.cl",
+    "telefono": "12345678",
+    "contrasena": "123",
+    "rol": "admin"
+}
+```
+El primer usuario administrador es para efectos de la carga de datos que se hará a continuación, y el segundo administrador es para efectivamente administrar la aplicación.
+
 5. Cargar datos en la base de datos
 Desde la consola de PostgreSQL, ejecuta los siguientes comandos:
 ```sh
@@ -74,6 +95,7 @@ Ingresa la contraseña del usuario postgres cuando se solicite.
 6. Configurar y ejecutar el frontend
 Dentro de la carpeta front-grupo1, abre la consola y ejecuta los siguientes comandos para instalar las dependencias y levantar el frontend:
 ```sh
+npm install
 npm install axios
 npm install vue-cookies --save
 npm install jwt-decode
@@ -81,5 +103,5 @@ npm run dev
 ```
 
 6. Uso de la aplicación
-* Accede a la aplicación usando las credenciales del usuario administrador creado en el paso 4.
+* Accede a la aplicación usando las credenciales del segundo usuario administrador creado en el paso 4.
 * También puedes registrar nuevos usuarios clientes para interactuar con el sistema.
