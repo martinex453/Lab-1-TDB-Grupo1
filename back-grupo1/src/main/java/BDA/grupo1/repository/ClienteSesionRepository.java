@@ -4,5 +4,5 @@ import BDA.grupo1.model.ClienteSesion;
 
 public interface ClienteSesionRepository {
     public Integer crear(Integer cliente_id);
-    public void delete(Integer id);
+    public void deleteAll();
 }

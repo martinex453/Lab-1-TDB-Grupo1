@@ -12,10 +12,11 @@ public class ClienteSesionService {
     private ClienteSesionRepository clienteSesionRepository;
 
     public Integer crear(Integer id) {
+        clienteSesionRepository.deleteAll();
         return clienteSesionRepository.crear(id);
     }
 
-    public void delete(Integer id) {
-        clienteSesionRepository.delete(id);
+    public void delete() {
+        clienteSesionRepository.deleteAll();
     }
 }

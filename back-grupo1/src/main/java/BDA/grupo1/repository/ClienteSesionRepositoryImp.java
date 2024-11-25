@@ -28,11 +28,10 @@ public class ClienteSesionRepositoryImp implements ClienteSesionRepository {
     }
 
     @Override
-    public void delete(Integer cliente_id){
+    public void deleteAll(){
         try (Connection con = sql2o.open()) {
-            String sql = "DELETE FROM cliente_sesion WHERE cliente_id = :cliente_id";
+            String sql = "DELETE FROM cliente_sesion";
             con.createQuery(sql)
-                    .addParameter("cliente_id", cliente_id)
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -100,9 +100,6 @@ BEGIN
 		v_cliente_id :=1;
 	END IF;
 
-    -- Eliminar todas las filas en cliente_sesion
-    DELETE FROM cliente_sesion;
-
     -- Insertar la consulta ejecutada en la tabla de auditoría
     INSERT INTO detalles_querys (cliente_id, operacion, tabla_afectada, consulta)
     VALUES (

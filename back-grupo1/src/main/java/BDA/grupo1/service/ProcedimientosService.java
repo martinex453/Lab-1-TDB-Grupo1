@@ -66,11 +66,8 @@ public class ProcedimientosService {
     }
 
     public void aplicarDescuentoACategoria(int idCategoria, float descuento) {
-        // Usar la sintaxis adecuada para invocar procedimientos almacenados
-        String sql = "CALL aplicar_descuento_a_categoria(:idCategoria, :descuento)";  // Sintaxis correcta
-
+        String sql = "CALL aplicar_descuento_a_categoria(:idCategoria, :descuento)";
         BigDecimal nuevoDescuento = new BigDecimal(descuento);
-        // Ejecutar el procedimiento con los parámetros correspondientes
         try (Connection con = sql2o.open()){
             con.createQuery(sql)
             .addParameter("idCategoria", idCategoria)
@@ -98,7 +95,4 @@ public class ProcedimientosService {
         }
         return "Orden creada con éxito";
     }
-
-
-
 }

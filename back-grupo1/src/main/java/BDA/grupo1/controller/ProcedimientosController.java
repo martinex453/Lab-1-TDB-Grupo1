@@ -1,6 +1,7 @@
 package BDA.grupo1.controller;
 
 import BDA.grupo1.model.DetalleOrden;
+import BDA.grupo1.service.ClienteSesionService;
 import BDA.grupo1.service.ProcedimientosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ public class ProcedimientosController {
 
     @Autowired
     private ProcedimientosService procedimientoService;
+    @Autowired
+    private ClienteSesionService clienteSesionService;
 
     @GetMapping("/top_usuarios")
     public ResponseEntity<String> obtenerReporteTopUsuarios() {
@@ -30,7 +33,6 @@ public class ProcedimientosController {
     @GetMapping("/aplicar_descuento")
     public String aplicarDescuento(@RequestParam int idCategoria, @RequestParam float descuento) {
         try {
-            // Llamar al servicio para aplicar el descuento
             procedimientoService.aplicarDescuentoACategoria(idCategoria, descuento);
             return "Descuento aplicado correctamente.";
         } catch (Exception e) {
@@ -41,6 +43,7 @@ public class ProcedimientosController {
     @PostMapping("/crearOrdenCompra/{id_cliente}")
     public String crearOrden(@PathVariable int id_cliente, @RequestBody List<DetalleOrden> detalles) {
        try{
+           clienteSesionService.crear(id_cliente);
            procedimientoService.crearOrdenCompra(id_cliente, detalles);
            return "Orden de compra realizada con exito.";
        } catch (Exception e) {
