@@ -2,32 +2,52 @@
 Este repositorio contiene todos los archivos relacionados con el Laboratorio N°1 del Laboratorio de Base de Datos Avanzadas desarrollado por el grupo 1.
 
 **IMPORTANTE:** 
-*Para poder conectarse correctamente a la Base de Datos, se deben colocar el username y password con el que se configuró postgresSQL, se deben ajustar los puertos de conexión con la base de datos (5433), y el puerto donde la aplicación Spring Boot esta disponible (8090), todo en el archivo aplication.properties dentro de la carpeta resources en Backend,
-*En caso de cambios en los parámetros anteriores, en el frontend en el archivo .env hay que asegurarse que la dirección del servidor y el puerto del backend coincidan con lo puesto en el archivo aplication.properties
+Para poder conectarse correctamente con la base de datos y el backend, asegurate de lo siguientes:
+1. Configura el archivo application.properties en la carpeta resources del backend:
+* Actualiza el usuario y contraseña de PostgreSQL. (usuario: postgres, contraseña: password por defecto)
+* Ajusta el puerto de conexión de la base de datos (5433 por defecto).
+* Configura el puerto donde estará disponible la aplicación Spring Boot (8090 por defecto).
+ 
+2. En caso de modificar la dirección del servidor o el puerto en application.properties, actualiza también el archivo .env en el frontend para asegurar que ambos coincidan.
+
+## Requisitos previos
+Para ejecutar correctamente todo el proyecto, además de los archivos del repositorio se requieren las siguientes tecnologías:
+* Postgres SQL versión 12.22.
+* PgAdmin versión 4.
+* IntelliJ IDEA.
+* VUE versión 3.
+* Postman.
+* Visual Studio Code.
 
 ## Instrucciones de uso
-1. Clonar el repositorio:
+1. Clona el repositorio en tu máquina local usando el siguiente comando:
 ```sh
 git clone https://github.com/martinex453/Lab-1-TDB-Grupo1.git
 ```
 
-2. Abrir pgAdmin y la consola, primero ejecutar en la consola:
+2. Configurar la base de datos
+* Abre pgAdmin o utiliza la consola de PostgreSQL.
+* Ejecuta los siguientes comandos en la consola:
 ```sh
 psql -U postgres
 ```
-Aqui se solicitara la contraseña del usuario postgres.
-Luego se ejecuta:
+Ingresa la contraseña del usuario postgres cuando se solicite.
+* Carga el archivo de creación de la base de datos: 
 ```sh
-\i C:/mis_archivos/DBCreate.sql
+\i C:/ruta/DBCreate.sql  
 ```
-Con esto ya se habrá creado la base de datos.
+Esto creará la estructura de la base de datos necesaria para la aplicación.
 
-3. Utilizando IntelliJ IDEA, ejecutar la aplicación haciendo clic en la opción "Run".
+3. Ejecutar el backend
+* Abre la carpeta back-grupo1 en IntelliJ IDEA.
+* Ejecuta la aplicación haciendo clic en la opción "Run".
 
-4. Crear un usuario administrador por postman, usando POST y lo siguente:
+4. Crear un usuario administrador
+Utiliza Postman para crear un usuario administrador enviando una solicitud POST a:
 ```sh
 http://localhost:8090/cliente/crear_cuenta
 ```
+Con el siguiente cuerpo JSON:
 ```sh
 {
     "nombre": "admin",
@@ -38,14 +58,28 @@ http://localhost:8090/cliente/crear_cuenta
     "rol": "admin"
 }
 ```
+5. Cargar datos en la base de datos
+Desde la consola de PostgreSQL, ejecuta los siguientes comandos:
+```sh
+psql -U postgres
+```
+Ingresa la contraseña del usuario postgres cuando se solicite.
+* Carga los datos para la base de datos: 
+```sh
+\i C:/ruta/loadDB.sql  
+```
+* No podrás iniciar sesión con los datos de los clientes cargados mediante este archivo, ya que las contraseñas en el archivo SQL no están encriptadas.
+* Estos datos son únicamente para tener información que se pueda mostrar en las vistas del sistema o realizar pruebas.
 
-5. Dentro de la carpeta front-grupo1, abrir la consola y ejecutar los siguientes comandos en orden: 
+6. Configurar y ejecutar el frontend
+Dentro de la carpeta front-grupo1, abre la consola y ejecuta los siguientes comandos para instalar las dependencias y levantar el frontend:
 ```sh
 npm install axios
-npm install vue-cookies --sabe
+npm install vue-cookies --save
 npm install jwt-decode
 npm run dev
 ```
-Con los primeros 3 comandos se instalan las librerías necesarias y con el último comando se levanta el frontend.
 
-6. Ahora se puede proceder a hacer uso de el cliente Admin creado por postman, o de crear un nuevo usuario cliente.
+6. Uso de la aplicación
+* Accede a la aplicación usando las credenciales del usuario administrador creado en el paso 4.
+* También puedes registrar nuevos usuarios clientes para interactuar con el sistema.
