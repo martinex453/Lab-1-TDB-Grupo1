@@ -10,6 +10,7 @@
                         <th>Fecha creación</th>
                         <th>Estado</th>
                         <th>Total</th>
+                        <th v-if="isAdmin">Usuario</th>
                         <th>Detalles</th>
                         <th v-if="isAdmin">Acciones</th>
                     </tr>
@@ -19,6 +20,7 @@
                         <td>{{ formatDate(order.fecha_orden) }}</td>
                         <td>{{ order.estado }}</td>
                         <td>{{ order.total }}</td>
+                        <td v-if="isAdmin">{{ order.usuario_nombre }}</td>
                         <td>
                             <button @click="goToOrderDetail(order.id_orden)">Ir</button>
                         </td>
@@ -38,65 +40,67 @@
 
 <script>
 import orderService from '@/services/orderService';
+import clienteService from '@/services/clientServices';
 
 export default {
-    //Definir las propiedades del componente
     data() {
         return {
             orders: [],
+            clientes: [],
             isAdmin: false,
-            page: 1, //Numero de página actual
-            pageSize: 12, //Tamaño de la página
+            page: 1,
+            pageSize: 12,
             id_user: localStorage.getItem('idUser'),
             token: this.$cookies.get("jwt"),
         };
     },
     methods: {
         async getOrders() {
-            //Obtener el token de autenticación y el rol del usuario
             const token = this.$cookies.get("jwt");
             const userRole = localStorage.getItem("userRole");
-
-            //Verificar si el usuario es administrador
             this.isAdmin = userRole === 'admin';
-            
+
             try {
+                let ordersResponse;
                 if (this.isAdmin) {
-                    //Obtener las órdenes de compra si el usuario es administrador
-                    const response = await orderService.getOrders(this.page, this.pageSize, token);
-                    this.orders = response.data;
+                    const clientesResponse = await clienteService.getAll(token);
+                    this.clientes = clientesResponse.data;
+                    console.log(this.clientes);
+
+                    ordersResponse = await orderService.getOrders(this.page, this.pageSize, token);
+
+                    this.orders = ordersResponse.data.map(order => {
+                        const cliente = this.clientes.find(c => c.id_cliente === order.id_cliente);
+                        return {
+                            ...order,
+                            usuario_nombre: cliente ? cliente.nombre : 'Desconocido'
+                        };
+                    });
                 } else {
-                    //Obtener el id del usuario y buscar sus órdenes de compra
                     const id = localStorage.getItem('idUser');
-                    const response = await orderService.getOrderByUserId(id, this.page, this.pageSize, token);
-                    this.orders = response.data;
+                    ordersResponse = await orderService.getOrderByUserId(id, this.page, this.pageSize, token);
+                    this.orders = ordersResponse.data;
                 }
             } catch (error) {
-                //Mostrar un mensaje de error si no se pueden obtener las órdenes
-                console.error("Error al obtener órdenes:", error);
+                console.error("Error al obtener órdenes o clientes:", error);
             }
         },
         async sendOrder(order) {
             try {
-                //Cambiar el estado de la orden a 'enviada'
                 console.log(order);
                 order.estado = 'enviada';
                 await orderService.updateOrder(order.id_orden, order, this.id_user, this.token);
-                //Actualizar la lista de órdenes
                 this.getOrders();
                 alert('Orden enviada correctamente');
             } catch (error) {
-                //Mostrar un mensaje de error si no se puede enviar la orden
                 console.error("Error al enviar la orden:", error);
                 alert('Error al enviar la orden');
             }
         },
         goToOrderDetail(orderId) {
-            //Redirigir a la página de detalles de la orden
             this.$router.push(`/order/${orderId}`);
         },
         formatDate(date) {
-            //Formatear la fecha de la orden
             const newDate = new Date(date);
             return newDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -105,13 +109,11 @@ export default {
             });
         },
         async changePage(newPage) {
-            //Cambiar la página actual y obtener las órdenes de la nueva página
             this.page = newPage;
             await this.getOrders();
         }
     },
     mounted() {
-        //Llamar al método para obtener las órdenes de compra
         this.getOrders();
     }
 };

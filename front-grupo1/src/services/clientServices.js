@@ -43,12 +43,23 @@ const getTopSpenders = (token) => {
     });
 };
 
+const getAll = (token) => {
+    //Obtener todos los clientes
+    return httpClient.get("/cliente/All", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+
 
 export default {
     createCliente,
     loginCliente,
     getRole,
     getTopUsers,
-    getTopSpenders
+    getTopSpenders,
+    getAll
 };
 
